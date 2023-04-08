@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:mokarabia/model/product.dart';
 import 'package:mokarabia/view/layout/login/login_screen.dart';
 import 'package:mokarabia/view/resources/componets/navigator.dart';
@@ -82,7 +84,7 @@ class HomeScreen extends StatelessWidget {
                 ),
             ),
             ElevatedButton.icon(
-                onPressed: (){},
+                onPressed: (){makeOrderDialog(context);},
                 icon: const Icon(Icons.coffee),
                 label: const Text("Make an order"))
           ],
@@ -90,4 +92,57 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
+
+  Future makeOrderDialog(context) async {
+    bool done= true;
+    final randomNumberGenerator = Random();
+    final randomBoolean = randomNumberGenerator.nextBool();
+
+    return showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: done? null:const Text('Review'),
+          content: AnimatedSwitcher(
+            duration: const Duration(seconds: 3),
+            transitionBuilder: (Widget child, Animation<double> animation) {
+              return ScaleTransition(scale: animation, child: child);
+            },
+            child: false? Wrap(
+              alignment: WrapAlignment.center,
+              children: [
+                randomBoolean?
+                Transform.scale(scale:5, child: Lottie.asset('assets/lottie/coffee.zip')):
+                Transform.scale(scale:2, child: Lottie.asset('assets/lottie/coffee-time.zip')),
+                const Text('Your order is sent successfully'),
+                TextButton(
+                  child: const Text("OK"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ) : SingleChildScrollView(
+              child: Column(
+                children:  <Widget>[
+
+
+                  TextButton(
+                    child: const Text('Confirm'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+
+
 }
