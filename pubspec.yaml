@@ -17,6 +17,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_bloc: ^7.2.0
   lottie: ^2.0.0
+  flutter_native_splash: ^2.1.5
 
 
 dev_dependencies:

@@ -16,10 +16,10 @@ class LoginScreen extends StatelessWidget {
       },
       child: Scaffold(
         backgroundColor: darkMainColor,
-        appBar: AppBar(
-          backgroundColor: darkMainColor,
-          elevation: 0,
-        ),
+        // appBar: AppBar(
+        //   backgroundColor: darkMainColor,
+        //   elevation: 0,
+        // ),
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -47,11 +47,61 @@ class LoginScreen extends StatelessWidget {
                       fixedSize: MaterialStateProperty.all(const Size(250, 30)),
                       elevation: MaterialStateProperty.all(7)),
                   child: const Text("Login")),
-              TextButton(onPressed: (){}, child: const Text("Are you Admin?"))
+              TextButton(onPressed: (){
+                adminLoginDialog(context);
+              }, child: const Text("Are you Admin?"))
             ],
           ),
         ),
       ),
     );
   }
+
+  Future adminLoginDialog(context) async {
+    return showDialog(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return GestureDetector(
+          onTap: () {
+            FocusScopeNode currentFocus = FocusScope.of(context);
+            if (!currentFocus.hasPrimaryFocus) {
+              currentFocus.unfocus();
+            }
+          },
+          child: AlertDialog(
+            title: const Text('Login as admin'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: const <Widget>[
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 5),
+                    child: TextField(
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        icon: Icon(Icons.password),
+                        labelText: 'Password',
+                        labelStyle: TextStyle(
+                          color: Color(0xFF6200EE),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Login'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
 }
