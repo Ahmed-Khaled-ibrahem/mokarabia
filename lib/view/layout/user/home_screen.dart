@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mokarabia/model/product.dart';
 import 'package:mokarabia/view/layout/login/login_screen.dart';
+import 'package:mokarabia/view/layout/user/history_screen.dart';
 import 'package:mokarabia/view/resources/componets/navigator.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -14,13 +15,6 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // title: Wrap(
-        //   children: const [
-        //     Icon(Icons.coffee),
-        //     SizedBox(width: 5,),
-        //     Text("Mokarabia"),
-        //   ],
-        // ),
         centerTitle: true,
         toolbarHeight: 140,
         title: Image.asset('assets/images/logo.png',height: 140,),
@@ -83,10 +77,16 @@ class HomeScreen extends StatelessWidget {
                 ),
                 ),
             ),
-            ElevatedButton.icon(
-                onPressed: (){makeOrderDialog(context);},
-                icon: const Icon(Icons.coffee),
-                label: const Text("Make an order"))
+           Row(
+             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+             children: [ ElevatedButton.icon(
+               onPressed: (){makeOrderDialog(context);},
+               icon: const Icon(Icons.coffee),
+               label: const Text("Make an order")),
+             ElevatedButton.icon(
+                 onPressed: (){navigateTo(context, const HistoryScreen());},
+                 icon: const Icon(Icons.history),
+                 label: const Text("History"))],)
           ],
         ),
       ),
