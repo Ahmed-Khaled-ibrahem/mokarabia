@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import '../../resources/componets/navigator.dart';
 import '../../resources/theme/app_theme.dart';
+import '../user/home_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -42,7 +44,7 @@ class LoginScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20,),
               ElevatedButton(
-                  onPressed: (){},
+                  onPressed: (){ navigateReplacementTo(context,const HomeScreen());},
                   style: ButtonStyle(
                       fixedSize: MaterialStateProperty.all(const Size(250, 30)),
                       elevation: MaterialStateProperty.all(7)),
