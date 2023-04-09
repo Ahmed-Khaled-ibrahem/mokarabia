@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mokarabia/model/login_states.dart';
+import 'package:mokarabia/repo/pref_helper.dart';
 import 'package:mokarabia/view/layout/admin/active_orders.dart';
 import 'package:mokarabia/view/layout/admin/history_screen.dart';
 import 'package:mokarabia/view/layout/admin/summury_screen.dart';
@@ -30,7 +32,10 @@ class AdminHomeScreen extends StatelessWidget {
           actions: [
             Column(
               children: [
-                IconButton(onPressed: (){navigateReplacementTo(context, LoginScreen());}, icon: const Icon(Icons.logout)),
+                IconButton(onPressed: (){
+                  PreferenceHelper.putDataInSharedPreference(value: LoginState.none, key: PreferenceKey.loginState);
+                  navigateReplacementTo(context, LoginScreen());
+                  }, icon: const Icon(Icons.logout)),
               ],
             )
           ],
