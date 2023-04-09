@@ -76,7 +76,7 @@ class LoginScreen extends StatelessWidget {
                           value: LoginState.user,
                           key: PreferenceKey.loginState);
 
-                      navigateReplacementTo(context, const HomeScreen());
+                      navigateReplacementTo(context, HomeScreen());
 
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('Welcome ${userName.text}')),

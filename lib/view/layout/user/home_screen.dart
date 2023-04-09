@@ -1,7 +1,11 @@
 import 'dart:io';
 import 'dart:math';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
+import 'package:mokarabia/cubit/app_cubit.dart';
+import 'package:mokarabia/cubit/app_states.dart';
 import 'package:mokarabia/model/login_states.dart';
 import 'package:mokarabia/model/product.dart';
 import 'package:mokarabia/repo/pref_helper.dart';
@@ -10,7 +14,8 @@ import 'package:mokarabia/view/layout/user/history_screen.dart';
 import 'package:mokarabia/view/resources/componets/navigator.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  HomeScreen({Key? key}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +37,10 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
 
-      body: SingleChildScrollView(
+      body: BlocBuilder<AppCubit, AppStates>(
+  builder: (context, state) {
+    AppCubit cubit = AppCubit.get(context);
+    return SingleChildScrollView(
         child: Column(
           children: [
             Wrap(
@@ -85,7 +93,15 @@ class HomeScreen extends StatelessWidget {
            Row(
              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
              children: [ ElevatedButton.icon(
-               onPressed: (){makeOrderDialog(context);},
+               onPressed: () async {
+                 // cubit.sendOrder(context);
+
+                 cubit.readTable();
+
+
+
+                 // makeOrderDialog(context);
+                 },
                icon: const Icon(Icons.coffee),
                label: const Text("Make an order")),
              ElevatedButton.icon(
@@ -94,7 +110,9 @@ class HomeScreen extends StatelessWidget {
                  label: const Text("History"))],)
           ],
         ),
-      ),
+      );
+  },
+),
     );
   }
 
