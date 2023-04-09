@@ -3,7 +3,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:mokarabia/model/login_states.dart';
 import 'package:mokarabia/model/product.dart';
+import 'package:mokarabia/repo/pref_helper.dart';
 import 'package:mokarabia/view/layout/login/login_screen.dart';
 import 'package:mokarabia/view/layout/user/history_screen.dart';
 import 'package:mokarabia/view/resources/componets/navigator.dart';
@@ -21,7 +23,11 @@ class HomeScreen extends StatelessWidget {
         actions: [
           Column(
             children: [
-              IconButton(onPressed: (){navigateReplacementTo(context, const LoginScreen());}, icon: const Icon(Icons.logout)),
+              IconButton(onPressed: (){
+                PreferenceHelper.putDataInSharedPreference(value: LoginState.none, key: PreferenceKey.loginState);
+                navigateReplacementTo(context,  LoginScreen());
+                },
+                  icon: const Icon(Icons.logout)),
             ],
           )
         ],
