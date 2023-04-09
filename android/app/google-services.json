@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "894406491508",
+    "project_id": "mokarabia-50550",
+    "storage_bucket": "mokarabia-50550.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:894406491508:android:9be4206e64de6d7041c021",
+        "android_client_info": {
+          "package_name": "com.example.mokarabia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "894406491508-9kcilggtm291nqesuprvluuls5dl8uth.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbx-6yr5wYgVQfHUcXCUaBomuzBtOtx9s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "894406491508-9kcilggtm291nqesuprvluuls5dl8uth.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
