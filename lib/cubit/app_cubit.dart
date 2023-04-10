@@ -44,14 +44,17 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   void readOrders(){
-    // final snapshot = await ref.get();
-    // if (snapshot.exists) {
-    //   print( snapshot.value );
-    //   snapshot.children;
-    //
-    // } else {
-    //   print('No data available.');
-    // }
+
+    final snapshot = await ref.get();
+    if (snapshot.exists) {
+      print( snapshot.value );
+      snapshot.children;
+
+    } else {
+      print('No data available.');
+    }
+
+
   }
 
   void readTable() async {
