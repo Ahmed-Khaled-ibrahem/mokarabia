@@ -43,7 +43,7 @@ class AppCubit extends Cubit<AppStates> {
     );
   }
 
-  void readOrders(){
+  Future<void> readOrders() async {
 
     final snapshot = await ref.get();
     if (snapshot.exists) {
