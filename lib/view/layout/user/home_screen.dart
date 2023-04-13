@@ -1,6 +1,4 @@
-import 'dart:io';
 import 'dart:math';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
@@ -213,6 +211,7 @@ class HomeScreen extends StatelessWidget {
   void addCup(AppCubit cubit, int index){
     cubit.myOrder.products[allProducts[index].name!] = cubit.myOrder.products[allProducts[index].name!]! + 1;
     cubit.setState();
+    cubit.orderSentState = OrderSentState.notSent;
 }
 
   void removeCup(AppCubit cubit, int index){
@@ -220,6 +219,7 @@ class HomeScreen extends StatelessWidget {
     if(val>0){
       cubit.myOrder.products[allProducts[index].name!] = val - 1;
       cubit.setState();
+      cubit.orderSentState = OrderSentState.notSent;
     }
   }
 
@@ -228,6 +228,7 @@ class HomeScreen extends StatelessWidget {
     if(val>0){
       cubit.myOrder.products[allProducts[index].name!] = 0;
       cubit.setState();
+      cubit.orderSentState = OrderSentState.notSent;
     }
   }
 
