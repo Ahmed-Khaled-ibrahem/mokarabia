@@ -60,13 +60,15 @@ class AppCubit extends Cubit<AppStates> {
   void readTable() async {
     // DataBaseRepository.dispose();
 
-    Order newOrder = Order(personName: 'Ahmed khaled',
+    Order newOrder = Order(
+        personName: 'Ahmed khaled',
+      payment: PaymentType.paid,
         products: {
-      allProducts[0]:1,
-      allProducts[1]:0,
-      allProducts[2]:2,
+      Product.cappuccino:1,
+      Product.espresso:5,
+      Product.latte:2,
         },
-        payment: PaymentType.paid);
+       );
 
     historyTable.insertRow(newOrder.export());
 

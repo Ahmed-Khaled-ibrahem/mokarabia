@@ -2,21 +2,22 @@ import 'package:sqflite/sqflite.dart';
 
 class DataBaseRepository {
   static late Database database;
+  static String dataBaseName = 'historyBase';
 
    void init() async {
 
       database = await openDatabase(
-        "history.db",
-        version: 1,
+        "$dataBaseName.db",
+        version: 5,
         onCreate: (Database db, int version) async {
-          await db.execute('''CREATE TABLE history (
-                      "id"	INTEGER,
-                      "cap"	INTEGER,
-                      "esp"	INTEGER,
-                      "latte"	INTEGER,
-                      "payment"	TEXT,
-                      "orderdate" TEXT,
-                      "personname" TEXT,
+          await db.execute('''CREATE TABLE $dataBaseName (
+                      "id"	INTEGER, 
+                      "cap"	INTEGER, 
+                      "esp"	INTEGER, 
+                      "latte"	INTEGER, 
+                      "payment"	TEXT, 
+                      "orderdate" TEXT, 
+                      "person" TEXT, 
                 PRIMARY KEY("id" AUTOINCREMENT)
                 );''');
         },
@@ -32,7 +33,7 @@ class DataBaseRepository {
   }
 
   static void dispose() async {
-    database.delete("history");
+    database.delete(dataBaseName);
   }
 
   void insertUpdate(Map<String, dynamic> data) {
@@ -42,19 +43,12 @@ class DataBaseRepository {
   }
 
   void insertRow(Map<String, dynamic> data) {
-    database.insert("history", {
-      "personname":"ahmed",
-      // "orderdate":"date.toString()",
-      "payment":"payment",
-      "cap":5,
-      "latte":6,
-      "esp":1,
-    });
+    database.insert(dataBaseName, data);
   }
 
   Future<List<Map<String, dynamic>>> readData() async {
     try {
-      final List<Map<String, dynamic>> maps = await database.query("history");
+      final List<Map<String, dynamic>> maps = await database.query(dataBaseName);
       return maps;
     } catch (err) {
       return [];
