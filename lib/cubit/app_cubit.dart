@@ -4,6 +4,7 @@ import 'package:mokarabia/model/order.dart';
 import 'package:mokarabia/model/product.dart';
 import 'package:mokarabia/repo/sql.dart';
 
+import '../repo/pref_helper.dart';
 import 'app_states.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -12,10 +13,18 @@ class AppCubit extends Cubit<AppStates> {
 
   static AppCubit get(context) => BlocProvider.of(context);
 
-  // String var = " ";
   DatabaseReference ref = FirebaseDatabase.instance.ref();
-
   DataBaseRepository historyTable = DataBaseRepository()..init();
+
+  Order myOrder = Order(
+    personName: PreferenceHelper.getDataFromSharedPreference(key: PreferenceKey.userName),
+    payment: PaymentType.paid,
+    products: {
+      Product.cappuccino:0,
+      Product.espresso:0,
+      Product.latte:0,
+    },
+  );
 
 
   void setState() {
@@ -27,6 +36,9 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   Future<void> sendOrder(context) async {
+
+
+
     // DateTime.now().millisecond.toString()
     // await ref.child('afterinternetback').set(
     //   'val'
@@ -60,17 +72,7 @@ class AppCubit extends Cubit<AppStates> {
   void readTable() async {
     // DataBaseRepository.dispose();
 
-    Order newOrder = Order(
-        personName: 'Ahmed khaled',
-      payment: PaymentType.paid,
-        products: {
-      Product.cappuccino:1,
-      Product.espresso:5,
-      Product.latte:2,
-        },
-       );
-
-    historyTable.insertRow(newOrder.export());
+    historyTable.insertRow(myOrder.export());
 
     var map = await historyTable.readData();
     print(map);

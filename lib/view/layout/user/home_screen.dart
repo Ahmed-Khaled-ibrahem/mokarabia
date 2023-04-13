@@ -16,7 +16,6 @@ import 'package:mokarabia/view/resources/componets/navigator.dart';
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,12 +56,19 @@ class HomeScreen extends StatelessWidget {
                                 fit: BoxFit.cover,),
                               ),
                             ),
-                            Stack(
-                              alignment: Alignment.center,
-                              children: const [
-                                Icon(Icons.circle,color: Colors.blue,size: 40,),
-                                Text('10',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
-                              ],
+                            Visibility(
+                              visible: cubit.myOrder.products[allProducts[index].name] != 0,
+                              child: InkWell(
+                                onTap: (){makeZero(cubit,index);},
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    const Icon(Icons.circle,color: Colors.blue,size: 40,),
+                                    Text(cubit.myOrder.products[allProducts[index].name].toString(),
+                                      style: const TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                                  ],
+                                ),
+                              ),
                             ),
                             Positioned(
                               right: 0,
@@ -75,16 +81,17 @@ class HomeScreen extends StatelessWidget {
                                     ))),
                           ],
                         ),
-                        Text(allProducts[index].name!,style: const TextStyle(fontSize: 22,fontWeight: FontWeight.bold),),
+                        Text(allProducts[index].name!,
+                          style: const TextStyle(fontSize: 22,fontWeight: FontWeight.bold),),
                         Wrap(
                           alignment: WrapAlignment.center,
                           crossAxisAlignment: WrapCrossAlignment.center,
                           children: [
-                          IconButton(onPressed: (){}, icon: const Icon(Icons.add_circle,size: 40,color: Colors.green,), ),
-                          IconButton(onPressed: (){}, icon: const Icon(Icons.remove_circle,color: Colors.deepOrange,), ),
+                          IconButton(onPressed: (){addCup(cubit,index);},
+                            icon: const Icon(Icons.add_circle,size: 40,color: Colors.green,), ),
+                          IconButton(onPressed: (){removeCup(cubit, index);},
+                            icon: const Icon(Icons.remove_circle,color: Colors.deepOrange,), ),
                         ],),
-
-
                       ],
                     )
                 ),
@@ -166,6 +173,25 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
+  void addCup(AppCubit cubit, int index){
+    cubit.myOrder.products[allProducts[index].name!] = cubit.myOrder.products[allProducts[index].name!]! + 1;
+    cubit.setState();
+}
 
+  void removeCup(AppCubit cubit, int index){
+  int val = cubit.myOrder.products[allProducts[index].name!]!;
+    if(val>0){
+      cubit.myOrder.products[allProducts[index].name!] = val - 1;
+      cubit.setState();
+    }
+  }
+
+  void makeZero(AppCubit cubit, int index) {
+    int val = cubit.myOrder.products[allProducts[index].name!]!;
+    if(val>0){
+      cubit.myOrder.products[allProducts[index].name!] = 0;
+      cubit.setState();
+    }
+  }
 
 }

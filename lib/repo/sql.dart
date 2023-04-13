@@ -23,27 +23,10 @@ class DataBaseRepository {
         },
       );
 
-      // bool newNotification =
-      //     (await database.query("history", where: "seen=0")).isNotEmpty;
-      // bool newUpdate = (await database.query("history",
-      //         where: "data like '%\"type\": \"update\"%' and seen=0"))
-      //     .isNotEmpty;
-      
-
   }
 
   static void dispose() async {
     database.delete(dataBaseName);
-  }
-
-  void insertUpdate(Map<String, dynamic> data) {
-    database.delete("history",
-        where: "data like '%\"type\": \"update\"%' AND seen=0");
-    database.insert("history", {"seen": 0, "data": data.toString()});
-  }
-
-  void insertRow(Map<String, dynamic> data) {
-    database.insert(dataBaseName, data);
   }
 
   Future<List<Map<String, dynamic>>> readData() async {
@@ -53,6 +36,18 @@ class DataBaseRepository {
     } catch (err) {
       return [];
     }
+  }
+
+  void insertRow(Map<String, dynamic> data) {
+    database.insert(dataBaseName, data);
+  }
+
+
+
+  void insertUpdate(Map<String, dynamic> data) {
+    database.delete("history",
+        where: "data like '%\"type\": \"update\"%' AND seen=0");
+    database.insert("history", {"seen": 0, "data": data.toString()});
   }
 
   Future<List<Map<String, dynamic>>> readNewData() async {
@@ -65,15 +60,6 @@ class DataBaseRepository {
 
   void removeNotification(int id) {
     database.delete("history", where: "id=$id");
-  }
-
-  Future<void> removeAll() async {
-    await database.delete("history",
-        where: "data NOT like '%\"type\":\"update\"%' AND seen=1");
-  }
-
-  void updateSeen(int id) {
-    database.update("history", {"seen": 1}, where: "id=$id");
   }
 
   void updateUpdateSeen() {
