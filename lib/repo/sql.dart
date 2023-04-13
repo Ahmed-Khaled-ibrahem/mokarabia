@@ -32,7 +32,7 @@ class DataBaseRepository {
   Future<List<Map<String, dynamic>>> readData() async {
     try {
       final List<Map<String, dynamic>> maps = await database.query(dataBaseName);
-      return maps;
+      return maps.reversed.toList();
     } catch (err) {
       return [];
     }
