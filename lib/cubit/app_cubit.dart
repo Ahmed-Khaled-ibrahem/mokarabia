@@ -28,14 +28,28 @@ class AppCubit extends Cubit<AppStates> {
   );
 
   String orderSentState = OrderSentState.notSent;
+  String adminPass = 'ffdfhoa4g56hdgh';
 
 
   void setState() {
     emit(AppSetState());
   }
 
-  void initialSetup(){
-    // DatabaseReference ref = FirebaseDatabase.instance.ref();
+  Future<void> initialSetup() async {
+
+    final snapshot = await ref.get();
+    if (snapshot.exists) {
+      allProducts[0].price = double.parse(snapshot.child('const/cap').value.toString());
+      allProducts[1].price = double.parse(snapshot.child('const/esp').value.toString());
+      allProducts[2].price = double.parse(snapshot.child('const/latte').value.toString());
+
+      allProductsMap['latte']!.price = double.parse(snapshot.child('const/latte').value.toString());
+      allProductsMap['esp']!.price = double.parse(snapshot.child('const/esp').value.toString());
+      allProductsMap['cap']!.price = double.parse(snapshot.child('const/cap').value.toString());
+
+    } else {}
+
+    adminPass = await readPassword();
   }
 
   Future<void> sendOrder(context) async {
@@ -80,6 +94,18 @@ class AppCubit extends Cubit<AppStates> {
       SnackBar(content: Text(message)),
     );
   }
+
+  Future<String> readPassword() async{
+
+    final snapshot = await ref.get();
+    if (snapshot.exists) {
+      return snapshot.child('const/pass').value.toString();
+    } else {
+      return 'Ahmedqqnfaffsdsa';
+    }
+  }
+
+
 
   Future<void> readOrders() async {
 

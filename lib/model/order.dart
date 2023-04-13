@@ -23,6 +23,7 @@ class Order{
       "cap":products[Product.cappuccino],
       "latte":products[Product.latte],
       "esp":products[Product.espresso],
+      "cost":getCost().round(),
     };
   }
 

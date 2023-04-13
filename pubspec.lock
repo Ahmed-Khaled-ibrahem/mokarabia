@@ -33,6 +33,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.10.0"
+  async_textformfield:
+    dependency: "direct main"
+    description:
+      name: async_textformfield
+      sha256: "9b1410a0683bc34f050926d62876dcbaf6a449e4813f0c32e7e22ec6cfa980af"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0+3"
   bloc:
     dependency: transitive
     description:

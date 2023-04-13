@@ -18,6 +18,7 @@ class DataBaseRepository {
                       "payment"	TEXT, 
                       "orderdate" TEXT, 
                       "person" TEXT, 
+                      "cost" INTEGER, 
                 PRIMARY KEY("id" AUTOINCREMENT)
                 );''');
         },
@@ -27,6 +28,7 @@ class DataBaseRepository {
 
   static void dispose() async {
     database.delete(dataBaseName);
+    // databaseFactory.deleteDatabase('$dataBaseName.db');
   }
 
   Future<List<Map<String, dynamic>>> readData() async {

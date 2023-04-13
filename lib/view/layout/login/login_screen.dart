@@ -131,7 +131,7 @@ class LoginScreen extends StatelessWidget {
                           key: _passFormKey,
                           child: TextFormField(
                             validator: (value) {
-                              if (value != 'passWord') {
+                              if (value != cubit.adminPass) {
                                 return 'WRONG Password';
                               }
                               return null;
@@ -161,8 +161,6 @@ class LoginScreen extends StatelessWidget {
                     child: const Text('Login'),
                     onPressed: () {
                       if (_passFormKey.currentState!.validate()) {
-                        // Navigator.of(context).pop();
-                        // print('v,ds,vpds,vp,sfdpv');
 
                         PreferenceHelper.putDataInSharedPreference(
                             value: LoginState.admin,
