@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mokarabia/cubit/app_cubit.dart';
 import 'package:mokarabia/cubit/app_states.dart';
 import 'package:mokarabia/repo/sql.dart';
-
+import 'package:mokarabia/view/resources/componets/confirmation_dialog.dart';
 import '../../../model/product.dart';
 
 class HistoryScreen extends StatelessWidget {
@@ -18,7 +18,7 @@ class HistoryScreen extends StatelessWidget {
       appBar: AppBar(title: const Text('History'),
         actions: [
           IconButton(onPressed: () {
-            deleteAllHistory(cubit);
+            deleteAllHistory(cubit, context);
           }, icon: const Icon(Icons.delete))
         ],),
       body: FutureBuilder<List<Map<String, dynamic>>>(
@@ -45,7 +45,7 @@ class HistoryScreen extends StatelessWidget {
                             '${date[0]} \n'
                                 '${date[1]} \n'
                         ),
-                        trailing: Text(getCost(snapshot, index)),
+                        trailing: Text('${snapshot.data![index]['cost']} LE'),
                         subtitle: Text('by ${snapshot.data![index]['person']}'),
                         title: Text(getText(snapshot, index)),);
                     }),
@@ -61,9 +61,14 @@ class HistoryScreen extends StatelessWidget {
 );
   }
 
-  void deleteAllHistory(AppCubit cubit) {
-    DataBaseRepository.dispose();
-    cubit.setState();
+  void deleteAllHistory(AppCubit cubit, context) {
+
+    showConfirmDialog(context,(){
+      Navigator.of(context).pop();
+      DataBaseRepository.dispose();
+      cubit.setState();
+    },'Delete Confirmation','Are you sure that you want to delete all history');
+
   }
 
   String getText(snapshot, index) {

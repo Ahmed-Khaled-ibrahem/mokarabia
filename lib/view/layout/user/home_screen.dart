@@ -39,82 +39,109 @@ class HomeScreen extends StatelessWidget {
       body: BlocBuilder<AppCubit, AppStates>(
   builder: (context, state) {
     AppCubit cubit = AppCubit.get(context);
-    return SingleChildScrollView(
-        child: Column(
-          children: [
-            Wrap(
-                children: List.generate(3, (index) => Card(
-                    child: Column(
-                      children: [
-                        Stack(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: SizedBox.square(
-                                dimension: 150,
-                                child: Image.asset(allProducts[index].image!,
-                                fit: BoxFit.cover,),
-                              ),
-                            ),
-                            Visibility(
-                              visible: cubit.myOrder.products[allProducts[index].name] != 0,
-                              child: InkWell(
-                                onTap: (){makeZero(cubit,index);},
-                                child: Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    const Icon(Icons.circle,color: Colors.blue,size: 40,),
-                                    Text(cubit.myOrder.products[allProducts[index].name].toString(),
-                                      style: const TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
-                                  ],
+    return WillPopScope(
+      onWillPop: () async {
+        final shouldPop = await showDialog<bool>(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('Do you want to Exit?'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, true);
+                  },
+                  child: const Text('Yes'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, false);
+                  },
+                  child: const Text('No'),
+                ),
+              ],
+            );
+          },
+        );
+        return shouldPop!;
+      },
+      child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Wrap(
+                  children: List.generate(3, (index) => Card(
+                      child: Column(
+                        children: [
+                          Stack(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: SizedBox.square(
+                                  dimension: 150,
+                                  child: Image.asset(allProducts[index].image!,
+                                  fit: BoxFit.cover,),
                                 ),
                               ),
-                            ),
-                            Positioned(
-                              right: 0,
-                                bottom: 0,
-                                child: Card(
-                                    color: Colors.red,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(3.0),
-                                      child: Text('${allProducts[index].price!.round()} LE',style: const TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
-                                    ))),
-                          ],
-                        ),
-                        Text(allProducts[index].name!,
-                          style: const TextStyle(fontSize: 22,fontWeight: FontWeight.bold),),
-                        Wrap(
-                          alignment: WrapAlignment.center,
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          children: [
-                          IconButton(onPressed: (){addCup(cubit,index);},
-                            icon: const Icon(Icons.add_circle,size: 40,color: Colors.green,), ),
-                          IconButton(onPressed: (){removeCup(cubit, index);},
-                            icon: const Icon(Icons.remove_circle,color: Colors.deepOrange,), ),
-                        ],),
-                      ],
-                    )
-                ),
-                ),
-            ),
-           Row(
-             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-             children: [ ElevatedButton.icon(
-               onPressed: () async {
-                 // cubit.sendOrder(context);
-                 // cubit.readTable();
+                              Visibility(
+                                visible: cubit.myOrder.products[allProducts[index].name] != 0,
+                                child: InkWell(
+                                  onTap: (){makeZero(cubit,index);},
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      const Icon(Icons.circle,color: Colors.blue,size: 40,),
+                                      Text(cubit.myOrder.products[allProducts[index].name].toString(),
+                                        style: const TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                right: 0,
+                                  bottom: 0,
+                                  child: Card(
+                                      color: Colors.red,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(3.0),
+                                        child: Text('${allProducts[index].price!.round()} LE',style: const TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                                      ))),
+                            ],
+                          ),
+                          Text(allProducts[index].name!,
+                            style: const TextStyle(fontSize: 22,fontWeight: FontWeight.bold),),
+                          Wrap(
+                            alignment: WrapAlignment.center,
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: [
+                            IconButton(onPressed: (){addCup(cubit,index);},
+                              icon: const Icon(Icons.add_circle,size: 40,color: Colors.green,), ),
+                            IconButton(onPressed: (){removeCup(cubit, index);},
+                              icon: const Icon(Icons.remove_circle,color: Colors.deepOrange,), ),
+                          ],),
+                        ],
+                      )
+                  ),
+                  ),
+              ),
+             Row(
+               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+               children: [ ElevatedButton.icon(
+                 onPressed: () async {
+                   // cubit.sendOrder(context);
+                   // cubit.readTable();
 
-                 makeOrderDialog(context);
-                 },
-               icon: const Icon(Icons.coffee),
-               label: const Text("Make an order")),
-             ElevatedButton.icon(
-                 onPressed: (){navigateTo(context, const HistoryScreen());},
-                 icon: const Icon(Icons.history),
-                 label: const Text("History"))],)
-          ],
+                   makeOrderDialog(context);
+                   },
+                 icon: const Icon(Icons.coffee),
+                 label: const Text("Make an order")),
+               ElevatedButton.icon(
+                   onPressed: (){navigateTo(context, const HistoryScreen());},
+                   icon: const Icon(Icons.history),
+                   label: const Text("History"))],)
+            ],
+          ),
         ),
-      );
+    );
   },
 ),
     );

@@ -24,49 +24,76 @@ class AdminHomeScreen extends StatelessWidget {
 
     return  BlocBuilder<AppCubit, AppStates>(builder: ((context, state) {
       AppCubit cubit = AppCubit.get(context);
-      return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          toolbarHeight: 140,
-          title: Image.asset('assets/images/logo.png',height: 140,),
-          actions: [
-            Column(
-              children: [
-                IconButton(onPressed: (){
-                  PreferenceHelper.putDataInSharedPreference(value: LoginState.none, key: PreferenceKey.loginState);
-                  navigateReplacementTo(context, LoginScreen());
-                  }, icon: const Icon(Icons.logout)),
-              ],
-            )
-          ],
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.home),
-                  label: 'Home',
-                  backgroundColor: Colors.green
-              ),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.search),
-                  label: 'Search',
-                  backgroundColor: Colors.yellow
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person),
-                label: 'Profile',
-                backgroundColor: Colors.blue,
-              ),
+      return WillPopScope(
+        onWillPop: () async {
+          final shouldPop = await showDialog<bool>(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text('Do you want to Exit?'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context, true);
+                    },
+                    child: const Text('Yes'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context, false);
+                    },
+                    child: const Text('No'),
+                  ),
+                ],
+              );
+            },
+          );
+          return shouldPop!;
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            toolbarHeight: 140,
+            title: Image.asset('assets/images/logo.png',height: 140,),
+            actions: [
+              Column(
+                children: [
+                  IconButton(onPressed: (){
+                    PreferenceHelper.putDataInSharedPreference(value: LoginState.none, key: PreferenceKey.loginState);
+                    navigateReplacementTo(context, LoginScreen());
+                    }, icon: const Icon(Icons.logout)),
+                ],
+              )
             ],
-            type: BottomNavigationBarType.shifting,
-            currentIndex: _selectedIndex,
-            selectedItemColor: Colors.black,
-            iconSize: 40,
-            onTap: (index){_selectedIndex = index;
-              cubit.setState();},
-            elevation: 5
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+              items: const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.home),
+                    label: 'Home',
+                    backgroundColor: Colors.green
+                ),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.search),
+                    label: 'Search',
+                    backgroundColor: Colors.yellow
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.person),
+                  label: 'Profile',
+                  backgroundColor: Colors.blue,
+                ),
+              ],
+              type: BottomNavigationBarType.shifting,
+              currentIndex: _selectedIndex,
+              selectedItemColor: Colors.black,
+              iconSize: 40,
+              onTap: (index){_selectedIndex = index;
+                cubit.setState();},
+              elevation: 5
+          ),
+          body: screens[_selectedIndex],
         ),
-        body: screens[_selectedIndex],
       );
     }));
   }

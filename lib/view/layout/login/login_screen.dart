@@ -31,73 +31,100 @@ class LoginScreen extends StatelessWidget {
       child: BlocBuilder<AppCubit, AppStates>(
   builder: (context, state) {
     AppCubit cubit = AppCubit.get(context);
-    return Scaffold(
-        backgroundColor: darkMainColor,
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Lottie.asset(
-                'assets/lottie/coffee-time2.zip',
-              ),
-              Form(
-                key: _formKey,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: TextFormField(
-                    controller: userName,
-                    onEditingComplete: () {
-                      PreferenceHelper.putDataInSharedPreference(
-                          value: userName.text, key: PreferenceKey.userName);
-                    },
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your name';
-                      }
-                      if (value.length < 4) {
-                        return 'the name is too short';
-                      }
-                      return null;
-                    },
-                    decoration: const InputDecoration(
-                      icon: Icon(Icons.person_pin_rounded),
-                      labelText: 'Name',
-                      labelStyle: TextStyle(
-                        color: Color(0xFF6200EE),
+    return WillPopScope(
+      onWillPop: () async {
+        final shouldPop = await showDialog<bool>(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('Do you want to Exit?'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, true);
+                  },
+                  child: const Text('Yes'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, false);
+                  },
+                  child: const Text('No'),
+                ),
+              ],
+            );
+          },
+        );
+        return shouldPop!;
+      },
+      child: Scaffold(
+          backgroundColor: darkMainColor,
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                Lottie.asset(
+                  'assets/lottie/coffee-time2.zip',
+                ),
+                Form(
+                  key: _formKey,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: TextFormField(
+                      controller: userName,
+                      onEditingComplete: () {
+                        PreferenceHelper.putDataInSharedPreference(
+                            value: userName.text, key: PreferenceKey.userName);
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your name';
+                        }
+                        if (value.length < 4) {
+                          return 'the name is too short';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        icon: Icon(Icons.person_pin_rounded),
+                        labelText: 'Name',
+                        labelStyle: TextStyle(
+                          color: Color(0xFF6200EE),
+                        ),
+                        helperText: 'your name to be sent with the orders',
                       ),
-                      helperText: 'your name to be sent with the orders',
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 20,),
-              ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      PreferenceHelper.putDataInSharedPreference(
-                          value: userName.text, key: PreferenceKey.userName);
-                      PreferenceHelper.putDataInSharedPreference(
-                          value: LoginState.user,
-                          key: PreferenceKey.loginState);
-                      cubit.myOrder.personName = userName.text;
+                const SizedBox(height: 20,),
+                ElevatedButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        PreferenceHelper.putDataInSharedPreference(
+                            value: userName.text, key: PreferenceKey.userName);
+                        PreferenceHelper.putDataInSharedPreference(
+                            value: LoginState.user,
+                            key: PreferenceKey.loginState);
+                        cubit.myOrder.personName = userName.text;
 
-                      navigateReplacementTo(context, HomeScreen());
+                        navigateReplacementTo(context, HomeScreen());
 
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Welcome ${userName.text}')),
-                      );
-                    }
-                  },
-                  style: ButtonStyle(
-                      fixedSize: MaterialStateProperty.all(const Size(250, 30)),
-                      elevation: MaterialStateProperty.all(7)),
-                  child: const Text("Login")),
-              TextButton(onPressed: () {
-                adminLoginDialog(context);
-              }, child: const Text("Are you Admin?"))
-            ],
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Welcome ${userName.text}')),
+                        );
+                      }
+                    },
+                    style: ButtonStyle(
+                        fixedSize: MaterialStateProperty.all(const Size(250, 30)),
+                        elevation: MaterialStateProperty.all(7)),
+                    child: const Text("Login")),
+                TextButton(onPressed: () {
+                  adminLoginDialog(context);
+                }, child: const Text("Are you Admin?"))
+              ],
+            ),
           ),
         ),
-      );
+    );
   },
 ),
     );
