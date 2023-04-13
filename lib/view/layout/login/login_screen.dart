@@ -28,7 +28,10 @@ class LoginScreen extends StatelessWidget {
           currentFocus.unfocus();
         }
       },
-      child: Scaffold(
+      child: BlocBuilder<AppCubit, AppStates>(
+  builder: (context, state) {
+    AppCubit cubit = AppCubit.get(context);
+    return Scaffold(
         backgroundColor: darkMainColor,
         body: SingleChildScrollView(
           child: Column(
@@ -75,6 +78,7 @@ class LoginScreen extends StatelessWidget {
                       PreferenceHelper.putDataInSharedPreference(
                           value: LoginState.user,
                           key: PreferenceKey.loginState);
+                      cubit.myOrder.personName = userName.text;
 
                       navigateReplacementTo(context, HomeScreen());
 
@@ -93,7 +97,9 @@ class LoginScreen extends StatelessWidget {
             ],
           ),
         ),
-      ),
+      );
+  },
+),
     );
   }
 
