@@ -67,28 +67,22 @@ class AdminHomeScreen extends StatelessWidget {
               )
             ],
           ),
-          floatingActionButton: FloatingActionButton.extended(
-            label: const Text('refresh'),
-            icon: const Icon(Icons.refresh),
-              onPressed: (){
-            cubit.readOrders();
-          }),
           bottomNavigationBar: BottomNavigationBar(
 
               items: const <BottomNavigationBarItem>[
                 BottomNavigationBarItem(
-                    icon: Icon(Icons.home),
-                    label: 'Home',
+                    icon: Icon(Icons.coffee),
+                    label: 'Active Orders',
                     backgroundColor: Colors.green
                 ),
                 BottomNavigationBarItem(
-                    icon: Icon(Icons.search),
-                    label: 'Search',
+                    icon: Icon(Icons.work_history),
+                    label: 'History',
                     backgroundColor: Colors.yellow
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.person),
-                  label: 'Profile',
+                  icon: Icon(Icons.attach_money),
+                  label: 'Summary',
                   backgroundColor: Colors.blue,
                 ),
               ],

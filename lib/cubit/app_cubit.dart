@@ -126,17 +126,27 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   Future<void> removeOrder(index, String freeOrPaid) async {
-    if(freeOrPaid == 'free'){
 
-    }
-    else if(freeOrPaid == 'paid'){
+    if(freeOrPaid != 'delete'){
+
       await ref.child(activeOrders[index].key.toString()).remove().
       whenComplete((){
-        activeOrders.removeAt(index);
-        setState();
 
+        Order newOrder = Order(personName: activeOrders[index].value['person'],
+            products: {
+          Product.cappuccino : activeOrders[index].value['cap'],
+          Product.espresso : activeOrders[index].value['esp'],
+          Product.latte : activeOrders[index].value['latte'],
+            },
+            payment: freeOrPaid);
+
+        historyTable.insertRow(newOrder.export());
+        activeOrders.removeAt(index);
+
+        setState();
       });
     }
+
     else{
       await ref.child(activeOrders[index].key.toString()).remove().
       whenComplete((){
@@ -147,6 +157,8 @@ class AppCubit extends Cubit<AppStates> {
 
 
   }
+
+
 }
 
 

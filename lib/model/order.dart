@@ -28,11 +28,11 @@ class Order{
   }
 
   double getCost(){
+
    double val =
        products[allProducts[0].name]! * allProducts[0].price!+
        products[allProducts[1].name]! * allProducts[1].price!+
-       products[allProducts[2].name]! * allProducts[2].price!
-    ;
+       products[allProducts[2].name]! * allProducts[2].price!;
     return val;
   }
 }
