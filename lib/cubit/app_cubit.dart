@@ -1,6 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:mokarabia/model/order.dart';
+import 'package:mokarabia/model/order_sent_state.dart';
 import 'package:mokarabia/model/product.dart';
 import 'package:mokarabia/repo/sql.dart';
 
@@ -26,6 +27,8 @@ class AppCubit extends Cubit<AppStates> {
     },
   );
 
+  String orderSentState = OrderSentState.notSent;
+
 
   void setState() {
     emit(AppSetState());
@@ -36,16 +39,39 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   Future<void> sendOrder(context) async {
+    if(myOrder.getCost().round()==0){
+      Navigator.of(context).pop();
+      showError(context, 'please select order first');
+      return;
+    }
 
+    orderSentState = OrderSentState.loading;
+    setState();
 
+    myOrder.date = DateTime.now();
 
-    // DateTime.now().millisecond.toString()
-    // await ref.child('afterinternetback').set(
-    //   'val'
-    // ).onError((error, stackTrace) => (){ showError(context, 'error'); }).
-    // whenComplete(() => print('*****************')).
-    // timeout(const Duration(seconds: 2),onTimeout: (){ showError(context, 'error'); });
-    //
+    await ref.child('${myOrder.personName}${myOrder.date.hour}:${myOrder.date.minute}:${myOrder.date.second}').set(
+      myOrder.export()
+
+    ).onError((error, stackTrace) => (){
+      orderSentState = OrderSentState.notSent;
+      showError(context, 'there is error happened');
+      setState();
+    }).
+
+    whenComplete(() async {
+      orderSentState = OrderSentState.sent;
+      setState();
+
+      historyTable.insertRow(myOrder.export());
+
+      // var map = await historyTable.readData();
+
+    }).
+
+    timeout(const Duration(seconds: 5),onTimeout: (){
+      showError(context, 'seems takes a lot of time \n please check your internet connection');
+    });
 
   }
 

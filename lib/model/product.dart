@@ -13,8 +13,8 @@ class Product{
 }
 
 final List<Product> allProducts = [
-Product(id: 0,name: 'Cappuccino',price: 20,image: 'assets/images/cap.jpg'),
+Product(id: 0,name: 'Cappuccino',price: 25,image: 'assets/images/cap.jpg'),
 Product(id: 1,name: 'Espresso',price: 20,image: 'assets/images/esp.jpg'),
-Product(id: 2,name: 'Latte',price: 20,image: 'assets/images/late.jpg')
+Product(id: 2,name: 'Latte',price: 17,image: 'assets/images/late.jpg')
 ];
 

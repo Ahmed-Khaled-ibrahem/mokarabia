@@ -7,6 +7,8 @@ import 'package:lottie/lottie.dart';
 import 'package:mokarabia/cubit/app_cubit.dart';
 import 'package:mokarabia/cubit/app_states.dart';
 import 'package:mokarabia/model/login_states.dart';
+import 'package:mokarabia/model/order.dart';
+import 'package:mokarabia/model/order_sent_state.dart';
 import 'package:mokarabia/model/product.dart';
 import 'package:mokarabia/repo/pref_helper.dart';
 import 'package:mokarabia/view/layout/login/login_screen.dart';
@@ -102,12 +104,9 @@ class HomeScreen extends StatelessWidget {
              children: [ ElevatedButton.icon(
                onPressed: () async {
                  // cubit.sendOrder(context);
+                 // cubit.readTable();
 
-                 cubit.readTable();
-
-
-
-                 // makeOrderDialog(context);
+                 makeOrderDialog(context);
                  },
                icon: const Icon(Icons.coffee),
                label: const Text("Make an order")),
@@ -124,7 +123,6 @@ class HomeScreen extends StatelessWidget {
   }
 
   Future makeOrderDialog(context) async {
-    bool done= true;
     final randomNumberGenerator = Random();
     final randomBoolean = randomNumberGenerator.nextBool();
 
@@ -132,43 +130,82 @@ class HomeScreen extends StatelessWidget {
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: done? null:const Text('Review'),
-          content: AnimatedSwitcher(
-            duration: const Duration(seconds: 3),
-            transitionBuilder: (Widget child, Animation<double> animation) {
-              return ScaleTransition(scale: animation, child: child);
-            },
-            child: false? Wrap(
-              alignment: WrapAlignment.center,
-              children: [
-                randomBoolean?
-                Transform.scale(scale:5, child: Lottie.asset('assets/lottie/coffee.zip')):
-                Transform.scale(scale:2, child: Lottie.asset('assets/lottie/coffee-time.zip')),
-                const Text('Your order is sent successfully'),
-                TextButton(
-                  child: const Text("OK"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            ) : SingleChildScrollView(
-              child: Column(
-                children:  <Widget>[
-
-
+        return BlocBuilder<AppCubit, AppStates>(
+  builder: (context, state) {
+    AppCubit cubit = AppCubit.get(context);
+    return AlertDialog(
+          title: cubit.orderSentState == OrderSentState.notSent? const Text('Review'):Container(),
+          content: SizedBox(
+            height: 250,
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 400),
+              switchInCurve: Curves.bounceInOut,
+              switchOutCurve: Curves.easeOutCirc,
+              transitionBuilder: (Widget child, Animation<double> animation) {
+                return ScaleTransition(scale: animation, child: child);
+              },
+              child: cubit.orderSentState == OrderSentState.sent?
+              Wrap(
+                alignment: WrapAlignment.center,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  randomBoolean?
+                  Transform.scale(scale:7, child: Lottie.asset('assets/lottie/coffee.zip', height: 150)):
+                  Transform.scale(scale:2.8, child: Lottie.asset('assets/lottie/coffee-time.zip',height: 200)),
+                  const Text('Your order is sent successfully'),
                   TextButton(
-                    child: const Text('Confirm'),
+                    child: const Text("OK"),
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
                   ),
                 ],
-              ),
+              )
+                  :
+              cubit.orderSentState == OrderSentState.notSent?
+              SingleChildScrollView(
+                child: Column(
+                  children:  <Widget>[
+                    const SizedBox(height: 10,),
+                    Row(
+                      children: const [
+                        Text('Order:',style: TextStyle(fontWeight: FontWeight.bold),),
+                      ],
+                    ),
+                    ...getListOrder(cubit.myOrder),
+                    Row(
+                      children: const [
+                        Text('Cost:',style: TextStyle(fontWeight: FontWeight.bold),),
+                      ],
+                    ),
+                    Text("${cubit.myOrder.getCost().round().toString()} LE"),
+                    const SizedBox(height: 30,),
+                    TextButton(
+                      child: const Text('Confirm'),
+                      onPressed: () {
+                        cubit.sendOrder(context);
+                        // Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                ),
+              ):
+
+                  Wrap(
+                    runSpacing: 20,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    spacing: 20,
+                    alignment: WrapAlignment.center,
+                    children: const [
+                    CircularProgressIndicator(),
+                    Text('Loading')
+                  ],),
+
             ),
           ),
         );
+  },
+);
       },
     );
   }
@@ -194,4 +231,14 @@ class HomeScreen extends StatelessWidget {
     }
   }
 
+  List<Widget>getListOrder(Order myOrder){
+    List<Widget> val = List.empty(growable: true);
+
+    myOrder.products.forEach((key, value) {
+      if(value != 0){
+        val.add(Text('$value X  $key '));
+      }
+    });
+    return val;
+  }
 }
