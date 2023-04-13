@@ -4,7 +4,6 @@ import 'package:mokarabia/model/order.dart';
 import 'package:mokarabia/model/order_sent_state.dart';
 import 'package:mokarabia/model/product.dart';
 import 'package:mokarabia/repo/sql.dart';
-
 import '../repo/pref_helper.dart';
 import 'app_states.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,6 +28,7 @@ class AppCubit extends Cubit<AppStates> {
 
   String orderSentState = OrderSentState.notSent;
   String adminPass = 'ffdfhoa4g56hdgh';
+  List activeOrders  = [];
 
 
   void setState() {
@@ -50,6 +50,7 @@ class AppCubit extends Cubit<AppStates> {
     } else {}
 
     adminPass = await readPassword();
+    readOrders();
   }
 
   Future<void> sendOrder(context) async {
@@ -105,32 +106,47 @@ class AppCubit extends Cubit<AppStates> {
     }
   }
 
-
-
   Future<void> readOrders() async {
 
     final snapshot = await ref.get();
     if (snapshot.exists) {
-      print( snapshot.value );
-      snapshot.children;
+
+      activeOrders = snapshot.children.toList();
+
+      activeOrders.removeWhere((element) => element.key == 'const');
+
+      activeOrders.forEach((element) {
+        print(element.value);
+      });
 
     } else {
       print('No data available.');
     }
+    setState();
+  }
+
+  Future<void> removeOrder(index, String freeOrPaid) async {
+    if(freeOrPaid == 'free'){
+
+    }
+    else if(freeOrPaid == 'paid'){
+      await ref.child(activeOrders[index].key.toString()).remove().
+      whenComplete((){
+        activeOrders.removeAt(index);
+        setState();
+
+      });
+    }
+    else{
+      await ref.child(activeOrders[index].key.toString()).remove().
+      whenComplete((){
+        activeOrders.removeAt(index);
+        setState();
+      });
+    }
 
 
   }
-
-  void readTable() async {
-    // DataBaseRepository.dispose();
-
-    historyTable.insertRow(myOrder.export());
-
-    var map = await historyTable.readData();
-    print(map);
-    print(map.length);
-  }
-
 }
 
 

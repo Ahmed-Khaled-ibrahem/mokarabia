@@ -52,6 +52,7 @@ class AdminHomeScreen extends StatelessWidget {
         },
         child: Scaffold(
           appBar: AppBar(
+            leading: Container(),
             centerTitle: true,
             toolbarHeight: 140,
             title: Image.asset('assets/images/logo.png',height: 140,),
@@ -66,7 +67,14 @@ class AdminHomeScreen extends StatelessWidget {
               )
             ],
           ),
+          floatingActionButton: FloatingActionButton.extended(
+            label: const Text('refresh'),
+            icon: const Icon(Icons.refresh),
+              onPressed: (){
+            cubit.readOrders();
+          }),
           bottomNavigationBar: BottomNavigationBar(
+
               items: const <BottomNavigationBarItem>[
                 BottomNavigationBarItem(
                     icon: Icon(Icons.home),
