@@ -46,13 +46,7 @@ class DataBaseRepository {
 
 
 
-  void insertUpdate(Map<String, dynamic> data) {
-    database.delete("history",
-        where: "data like '%\"type\": \"update\"%' AND seen=0");
-    database.insert("history", {"seen": 0, "data": data.toString()});
-  }
-
-  Future<List<Map<String, dynamic>>> readNewData() async {
+  Future<List<Map<String, dynamic>>> readNewData(filter) async {
     try {
       return await database.query("history", where: "seen = 0");
     } catch (err) {
@@ -60,13 +54,5 @@ class DataBaseRepository {
     }
   }
 
-  void removeNotification(int id) {
-    database.delete("history", where: "id=$id");
-  }
-
-  void updateUpdateSeen() {
-    database.update("history", {"seen": 1},
-        where: "data like '%\"type\": \"update\"%'");
-  }
 }
 

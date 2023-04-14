@@ -59,68 +59,92 @@ class LoginScreen extends StatelessWidget {
       },
       child: Scaffold(
           backgroundColor: darkMainColor,
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                Lottie.asset(
-                  'assets/lottie/coffee-time2.zip',
-                ),
-                Form(
-                  key: _formKey,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30),
-                    child: TextFormField(
-                      controller: userName,
-                      onEditingComplete: () {
-                        PreferenceHelper.putDataInSharedPreference(
-                            value: userName.text, key: PreferenceKey.userName);
-                      },
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your name';
-                        }
-                        if (value.length < 4) {
-                          return 'the name is too short';
-                        }
-                        return null;
-                      },
-                      decoration: const InputDecoration(
-                        icon: Icon(Icons.person_pin_rounded),
-                        labelText: 'Name',
-                        labelStyle: TextStyle(
-                          color: Color(0xFF6200EE),
-                        ),
-                        helperText: 'your name to be sent with the orders',
-                      ),
+          body: SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Column(
+                    children: const [
+                      Text('Welcome to', style: TextStyle(fontSize: 14),),
+                      Text('MOKARABIA', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
+                    ],
+                  ),
+                  Transform.scale(
+                    scale: 1.5,
+                    child: Lottie.asset(
+                      'assets/lottie/coffee-time2.zip',
+                      height: 300
                     ),
                   ),
-                ),
-                const SizedBox(height: 20,),
-                ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        PreferenceHelper.putDataInSharedPreference(
-                            value: userName.text, key: PreferenceKey.userName);
-                        PreferenceHelper.putDataInSharedPreference(
-                            value: LoginState.user,
-                            key: PreferenceKey.loginState);
-                        cubit.myOrder.personName = userName.text;
 
-                        navigateReplacementTo(context, HomeScreen());
+                  const SizedBox(height: 15,),
+                  Container(
+                    margin: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.white.withOpacity(0.8)),
+                    child: Column(
+                      children: [
+                        Form(
+                          key: _formKey,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 30),
+                            child: TextFormField(
+                              controller: userName,
+                              onEditingComplete: () {
+                                PreferenceHelper.putDataInSharedPreference(
+                                    value: userName.text, key: PreferenceKey.userName);
+                              },
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter your name';
+                                }
+                                if (value.length < 4) {
+                                  return 'the name is too short';
+                                }
+                                return null;
+                              },
+                              decoration: const InputDecoration(
+                                icon: Icon(Icons.person_pin_rounded),
+                                labelText: 'Name',
+                                labelStyle: TextStyle(
+                                  color: Color(0xFF6200EE),
+                                ),
+                                helperText: 'your name to be sent with the orders',
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20,),
+                        ElevatedButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                PreferenceHelper.putDataInSharedPreference(
+                                    value: userName.text, key: PreferenceKey.userName);
+                                PreferenceHelper.putDataInSharedPreference(
+                                    value: LoginState.user,
+                                    key: PreferenceKey.loginState);
+                                cubit.myOrder.personName = userName.text;
 
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Welcome ${userName.text}')),
-                        );
-                      }
-                    },
-                    style: ButtonStyle(
-                        fixedSize: MaterialStateProperty.all(const Size(250, 30)),
-                        elevation: MaterialStateProperty.all(7)),
-                    child: const Text("Login")),
-                TextButton(onPressed: () {
-                  adminLoginDialog(context);
-                }, child: const Text("Are you Admin?"))
-              ],
+                                navigateReplacementTo(context, HomeScreen());
+
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('Welcome ${userName.text}')),
+                                );
+                              }
+                            },
+                            style: ButtonStyle(
+                                fixedSize: MaterialStateProperty.all(const Size(250, 30)),
+                                elevation: MaterialStateProperty.all(7)),
+                            child: const Text("Login")),
+                        TextButton(onPressed: () {
+                          adminLoginDialog(context);
+                        }, child: const Text("Are you Admin?")),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),

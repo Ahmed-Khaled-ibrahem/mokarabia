@@ -6,6 +6,7 @@ import 'package:mokarabia/view/layout/admin/active_orders.dart';
 import 'package:mokarabia/view/layout/admin/history_screen.dart';
 import 'package:mokarabia/view/layout/admin/summury_screen.dart';
 import 'package:mokarabia/view/layout/login/login_screen.dart';
+import 'package:mokarabia/view/resources/componets/confirmation_dialog.dart';
 import 'package:mokarabia/view/resources/componets/navigator.dart';
 import '../../../cubit/app_cubit.dart';
 import '../../../cubit/app_states.dart';
@@ -60,8 +61,13 @@ class AdminHomeScreen extends StatelessWidget {
               Column(
                 children: [
                   IconButton(onPressed: (){
-                    PreferenceHelper.putDataInSharedPreference(value: LoginState.none, key: PreferenceKey.loginState);
-                    navigateReplacementTo(context, LoginScreen());
+
+                    showConfirmDialog(context,(){
+                      Navigator.of(context).pop();
+                      PreferenceHelper.putDataInSharedPreference(value: LoginState.none, key: PreferenceKey.loginState);
+                      navigateReplacementTo(context, LoginScreen());
+                    },'Logout','Are you sure that you want to Logout');
+
                     }, icon: const Icon(Icons.logout)),
                 ],
               )
