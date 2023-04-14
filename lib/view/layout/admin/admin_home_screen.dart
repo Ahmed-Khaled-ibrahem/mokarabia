@@ -82,7 +82,7 @@ class AdminHomeScreen extends StatelessWidget {
                     backgroundColor: Colors.green
                 ),
                 BottomNavigationBarItem(
-                    icon: Icon(Icons.work_history),
+                    icon: Icon(Icons.table_rows_rounded),
                     label: 'History',
                     backgroundColor: Colors.yellow
                 ),

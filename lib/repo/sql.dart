@@ -44,11 +44,37 @@ class DataBaseRepository {
     database.insert(dataBaseName, data);
   }
 
-
-
-  Future<List<Map<String, dynamic>>> readNewData(filter) async {
+  Future<List<Map<String, dynamic>>> readNewData(String filter) async {
     try {
-      return await database.query("history", where: "seen = 0");
+      // return await database.query(dataBaseName, where: '');
+      // return await database.query(dataBaseName, distinct: true, columns: ['person']);
+      // return await database.rawQuery("SELECT SUM(cost) as Total FROM $dataBaseName");
+      // return await database.rawQuery("SELECT SUM(cost) as Total FROM $dataBaseName WHERE cap = 2");
+      // return await database.rawQuery("SELECT SUM(cost) as Total FROM $dataBaseName WHERE cap = 2");
+      return await database.rawQuery("SELECT SUM(cost) as Total FROM $dataBaseName WHERE payment = 'paid' AND person = 'ahmed khaled'");
+
+    } catch (err) {
+      return [];
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getSummary(String type,{String paidOrFree = '', String name = ''}) async {
+    try {
+      if(type == 'totalCost'){
+        return await database.rawQuery("SELECT SUM(cost) as Total FROM $dataBaseName WHERE payment = '$paidOrFree'");
+      }
+      if(type == 'customers'){
+        return await database.query(dataBaseName, distinct: true, columns: ['person']);
+      }
+      if(type == 'customerCost'){
+        return await database.rawQuery("SELECT SUM(cost) as Total FROM $dataBaseName WHERE payment = '$paidOrFree' AND person = '$name'");
+      }
+      if(type == 'count'){
+        return await database.query(dataBaseName, where: "person = '$name'");
+      }
+
+
+      return [];
     } catch (err) {
       return [];
     }

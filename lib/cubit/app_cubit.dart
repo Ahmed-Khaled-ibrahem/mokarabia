@@ -31,6 +31,7 @@ class AppCubit extends Cubit<AppStates> {
   List activeOrders  = [];
 
 
+
   void setState() {
     emit(AppSetState());
   }
@@ -157,6 +158,23 @@ class AppCubit extends Cubit<AppStates> {
 
 
   }
+
+  Future<void> testSQL() async {
+
+    print ('************ all data ********');
+    List<Map<String, dynamic>> allData = await historyTable.readData();
+    allData.forEach((element) { print(element) ;});
+
+    print ('************ data filtered ********');
+    List<Map<String, dynamic>> data = await historyTable.readNewData('');
+    data.forEach((element) { print(element) ;});
+
+  }
+
+  Future<List<Map<String, dynamic>>> readSummary(String type, {String paidOrFree='' ,String name=''}){
+      return historyTable.getSummary(type, paidOrFree: paidOrFree, name: name);
+  }
+
 
 
 }
