@@ -2,9 +2,11 @@ import 'package:dio/dio.dart';
 
 class DioHelper {
   late Dio dio;
+  String serverKey = 'AAAA0D7H_XQ:APA91bGu2eXPk11JH9oMx-f-fpTgDCXwqsaNQq7lTqUOEmnQM0u2rDpF5RyJyAboQqoP2gqpQJNDwW0MnjTe-m1YXL2ivZtIu1WgOG17sy1whpRsD95OMM2u4WyHFqxOkvmKQlF4uRSE';
 
   DioHelper() {
     dio = Dio(BaseOptions(
+      // baseUrl: 'https://fcm.googleapis.com//v1/projects/mokarabia-50550/messages:send',
       baseUrl: 'https://fcm.googleapis.com/fcm/',
       receiveDataWhenStatusError: true,
       connectTimeout: 50000,
@@ -24,11 +26,12 @@ class DioHelper {
 
     dio.options.headers = {
       'Content-Type': 'application/json',
-      'Authorization': 'key=BBT8hWRgo9QKIJEX3etz2NudPhdh3AnN6gWxqw3JI89p3NaDFtIQK2rwu11W-BUM88AIGOTWRWGDSEUKdNTJQmY',
+      'Authorization': 'key=$serverKey',
     };
 
     Map<String, dynamic> data = {
       "data": '',
+      'topic':'alert',
       "to": "/topics/alert",
       "notification": {"title": title, "body": body, "sound": "default"},
       "android": {

@@ -1,13 +1,17 @@
+import 'dart:convert';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:mokarabia/model/order.dart';
 import 'package:mokarabia/model/order_sent_state.dart';
 import 'package:mokarabia/model/product.dart';
-import 'package:mokarabia/repo/dio_helper.dart';
 import 'package:mokarabia/repo/sql.dart';
+import 'package:motion_toast/motion_toast.dart';
 import '../repo/pref_helper.dart';
 import 'app_states.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 
 class AppCubit extends Cubit<AppStates> {
   AppCubit() : super(AppInitial());
@@ -16,6 +20,7 @@ class AppCubit extends Cubit<AppStates> {
 
   DatabaseReference ref = FirebaseDatabase.instance.ref();
   DataBaseRepository historyTable = DataBaseRepository()..init();
+  late GlobalKey<ScaffoldMessengerState> scaffoldMessenger ;
 
   Order myOrder = Order(
     personName: PreferenceHelper.getDataFromSharedPreference(key: PreferenceKey.userName) ?? '',
@@ -36,7 +41,7 @@ class AppCubit extends Cubit<AppStates> {
     emit(AppSetState());
   }
 
-  Future<void> initialSetup() async {
+  Future<void> initialSetup(GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey) async {
 
     final snapshot = await ref.get();
     if (snapshot.exists) {
@@ -52,6 +57,27 @@ class AppCubit extends Cubit<AppStates> {
 
     adminPass = await readPassword();
     readOrders();
+
+    scaffoldMessenger = scaffoldMessengerKey;
+
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+
+      if (message.notification != null) {
+
+        String messageText ='New Order Arrived by ${message.data['name']} \nRefresh to see detail';
+
+        scaffoldMessenger.currentState!.showSnackBar(
+          SnackBar(
+              content: Text(messageText),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+
+      }
+
+    });
+
   }
 
   Future<void> sendOrder(context) async {
@@ -175,15 +201,54 @@ class AppCubit extends Cubit<AppStates> {
       return historyTable.getSummary(type, paidOrFree: paidOrFree, name: name);
   }
 
-  Future<void> sendNotification() async {
-    print('gsdgfdsf');
-    DioHelper dioHelper = DioHelper();
-    await dioHelper.postData(
-        sendData: {},
-        title: "Hello title",
-        body: "Click me");
-  }
+  Future<void> sendNotification(String name) async {
 
+    const String serverKey = 'AAAA0D7H_XQ:APA91bGu2eXPk11JH9oMx-f-fpTgDCXwqsaNQq7lTqUOEmnQM0u2rDpF5RyJyAboQqoP2gqpQJNDwW0MnjTe-m1YXL2ivZtIu1WgOG17sy1whpRsD95OMM2u4WyHFqxOkvmKQlF4uRSE';
+    final uri = Uri.parse('https://fcm.googleapis.com/fcm/send');
+
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'key=$serverKey',
+    };
+
+    Map<String, dynamic> body = {
+      "data": {'name': name},
+      // 'topic':'alert',
+      "to": "/topics/alert",
+      "notification": {
+        "title": 'New Order by $name',
+        "body": "open to see more detail",
+        "sound": "default"},
+
+      "android": {
+        "priority": "HIGH",
+        "notification": {
+          "notification_priority": "PRIORITY_MAX",
+          "sound": "default",
+          "default_sound": true,
+          "default_vibrate_timings": true,
+          "default_light_settings": true
+        }
+      }
+    };
+
+    String jsonBody = json.encode(body);
+    final encoding = Encoding.getByName('utf-8');
+
+    Response response = await post(
+      uri,
+      headers: headers,
+      body: jsonBody,
+      encoding: encoding,
+    );
+
+    int statusCode = response.statusCode;
+    String responseBody = response.body;
+
+    print(statusCode);
+    print(responseBody);
+
+  }
 
 }
 

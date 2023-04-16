@@ -22,25 +22,28 @@ Future<void> main() async {
   );
   await PreferenceHelper.init();
 
-  // FireNotificationHelper notificationHelper = FireNotificationHelper();
-
   await FirebaseMessaging.instance.subscribeToTopic("alert");
+
   // await FirebaseMessaging.instance.unsubscribeFromTopic("alert");
-
-
   runApp( MyApp() );
 }
+
+
+
 
 class MyApp extends StatelessWidget {
    MyApp({super.key});
 
   String? loginState = PreferenceHelper.getDataFromSharedPreference(key: PreferenceKey.loginState);
+  final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => AppCubit()..initialSetup(),
+
+      create: (context) => AppCubit()..initialSetup(scaffoldMessengerKey),
       child: MaterialApp(
+        scaffoldMessengerKey: scaffoldMessengerKey,
         title: 'Mokarabia',
         debugShowCheckedModeBanner: false,
         theme: appTheme,

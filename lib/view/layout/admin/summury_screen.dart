@@ -14,7 +14,7 @@ class SummaryScreen extends StatelessWidget {
 
         return Scaffold(
           floatingActionButton: FloatingActionButton(onPressed: () {
-            cubit.sendNotification();
+            cubit.sendNotification('ahmed k');
           }),
           body: Column(
             children: [
