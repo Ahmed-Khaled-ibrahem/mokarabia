@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mokarabia/model/order.dart';
 import 'package:mokarabia/model/order_sent_state.dart';
 import 'package:mokarabia/model/product.dart';
+import 'package:mokarabia/repo/dio_helper.dart';
 import 'package:mokarabia/repo/sql.dart';
 import '../repo/pref_helper.dart';
 import 'app_states.dart';
@@ -17,7 +18,7 @@ class AppCubit extends Cubit<AppStates> {
   DataBaseRepository historyTable = DataBaseRepository()..init();
 
   Order myOrder = Order(
-    personName: PreferenceHelper.getDataFromSharedPreference(key: PreferenceKey.userName),
+    personName: PreferenceHelper.getDataFromSharedPreference(key: PreferenceKey.userName) ?? '',
     payment: PaymentType.paid,
     products: {
       Product.cappuccino:0,
@@ -29,7 +30,6 @@ class AppCubit extends Cubit<AppStates> {
   String orderSentState = OrderSentState.notSent;
   String adminPass = 'ffdfhoa4g56hdgh';
   List activeOrders  = [];
-
 
 
   void setState() {
@@ -175,6 +175,14 @@ class AppCubit extends Cubit<AppStates> {
       return historyTable.getSummary(type, paidOrFree: paidOrFree, name: name);
   }
 
+  Future<void> sendNotification() async {
+    print('gsdgfdsf');
+    DioHelper dioHelper = DioHelper();
+    await dioHelper.postData(
+        sendData: {},
+        title: "Hello title",
+        body: "Click me");
+  }
 
 
 }

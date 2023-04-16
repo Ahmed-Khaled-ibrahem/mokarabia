@@ -14,7 +14,7 @@ class SummaryScreen extends StatelessWidget {
 
         return Scaffold(
           floatingActionButton: FloatingActionButton(onPressed: () {
-            cubit.testSQL();
+            cubit.sendNotification();
           }),
           body: Column(
             children: [
@@ -41,7 +41,7 @@ class SummaryScreen extends StatelessWidget {
                               Row(
                                 children: [
                                   Text(
-                                    snapshot.data![0]['Total'].toString(),
+                                    (snapshot.data![0]['Total']??0).toString(),
                                     style: const TextStyle(fontSize: 45),
                                   ),
                                   const Text(
@@ -72,7 +72,7 @@ class SummaryScreen extends StatelessWidget {
                                   Row(
                                     children:  [
                                       Text(
-                                        snapshot.data![0]['Total'].toString(),
+                                        (snapshot.data![0]['Total']??0).toString(),
                                         style: const TextStyle(fontSize: 45),
                                       ),
                                       const Text(
@@ -108,14 +108,14 @@ class SummaryScreen extends StatelessWidget {
                       children: List.generate(snapshot.data!.length, (index) =>
                           ListTile(
                             title: Text(snapshot.data![index]['person']),
-                            subtitle: Row(
+                            subtitle: Wrap(
                               children: [
                                 const Text('Free : '),
                                 FutureBuilder(
                                   initialData: const [{'person':'user'}],
                                   future: cubit.readSummary('customerCost',paidOrFree: 'free',name: snapshot.data![index]['person'].toString() ),
                                   builder: (BuildContext context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot2){
-                                    return Text(snapshot2.data![0]['Total'].toString());
+                                    return Text((snapshot2.data![0]['Total']??0).toString());
                                   },
                                 ),
                                 const Text(' LE   Paid : '),
@@ -123,13 +123,14 @@ class SummaryScreen extends StatelessWidget {
                                   initialData: const [{'person':'user'}],
                                   future: cubit.readSummary('customerCost',paidOrFree: 'paid',name: snapshot.data![index]['person'].toString()),
                                   builder: (BuildContext context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot3){
-                                    return Text(snapshot3.data![0]['Total'].toString());
+                                    return Text((snapshot3.data![0]['Total']??0).toString());
                                   },
                                 ),
                                 const Text(' LE'),
                               ],
                             ),
-                            trailing: Wrap(children:  [
+                            trailing: Wrap(
+                              children:  [
                               FutureBuilder(
                                 initialData: const [{'person':'user'}],
                                 future: cubit.readSummary('count',name: snapshot.data![index]['person'].toString()),
@@ -140,7 +141,8 @@ class SummaryScreen extends StatelessWidget {
                               const Icon(Icons.coffee_rounded)
                             ],),
                             // leading: Text((index+1).toString()),
-                          )),);
+                          )),
+                    );
                   },
                 ),
               )

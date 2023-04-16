@@ -73,7 +73,6 @@ class DataBaseRepository {
         return await database.query(dataBaseName, where: "person = '$name'");
       }
 
-
       return [];
     } catch (err) {
       return [];

@@ -1,9 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mokarabia/cubit/app_cubit.dart';
 import 'package:mokarabia/model/login_states.dart';
+import 'package:mokarabia/repo/fire_message.dart';
 import 'package:mokarabia/repo/firebase_options.dart';
 import 'package:mokarabia/repo/pref_helper.dart';
 import 'package:mokarabia/repo/sql.dart';
@@ -20,6 +22,10 @@ Future<void> main() async {
   );
   await PreferenceHelper.init();
 
+  // FireNotificationHelper notificationHelper = FireNotificationHelper();
+
+  await FirebaseMessaging.instance.subscribeToTopic("alert");
+  // await FirebaseMessaging.instance.unsubscribeFromTopic("alert");
 
 
   runApp( MyApp() );
