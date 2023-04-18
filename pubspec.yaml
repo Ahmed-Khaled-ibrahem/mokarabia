@@ -28,6 +28,7 @@ dependencies:
   dio: ^4.0.4
   http: ^0.13.5
   flutter_launcher_icons: ^0.13.0
+  flashy_tab_bar2: ^0.0.5
 
 
 dev_dependencies:

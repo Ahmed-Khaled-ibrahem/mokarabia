@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:mokarabia/cubit/app_cubit.dart';
 import 'package:mokarabia/cubit/app_states.dart';
+import 'package:mokarabia/view/resources/theme/app_theme.dart';
 
 class ActiveOrdersScreen extends StatelessWidget {
   const ActiveOrdersScreen({Key? key}) : super(key: key);
@@ -71,6 +72,7 @@ class ActiveOrdersScreen extends StatelessWidget {
                   ],
                 ),
                 child: ListTile(
+                  tileColor: index%2 == 0 ? Theme.of(context).colorScheme.onSecondary : Theme.of(context).colorScheme.secondary,
                   leading: Text('${date[0]} \n'
                       '${date[1]} \n'),
                   trailing: Text('${snapshot[index].value['cost']} LE'),

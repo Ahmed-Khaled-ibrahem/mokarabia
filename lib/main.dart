@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mokarabia/cubit/app_cubit.dart';
 import 'package:mokarabia/model/login_states.dart';
@@ -48,7 +47,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: lightTheme,
         darkTheme: darkTheme,
-        themeMode: ThemeMode.light,
+        themeMode: ThemeMode.dark,
         home: loginState == LoginState.user?  HomeScreen():
               loginState == LoginState.admin? AdminHomeScreen():
               LoginScreen(),

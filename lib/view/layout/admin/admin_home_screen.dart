@@ -1,4 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mokarabia/model/login_states.dart';
@@ -77,32 +78,65 @@ class AdminHomeScreen extends StatelessWidget {
               )
             ],
           ),
-          bottomNavigationBar: BottomNavigationBar(
-
-              items: const <BottomNavigationBarItem>[
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.coffee),
-                    label: 'Active Orders',
-                    backgroundColor: Colors.green
-                ),
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.table_rows_rounded),
-                    label: 'History',
-                    backgroundColor: Colors.yellow
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.attach_money),
-                  label: 'Summary',
-                  backgroundColor: Colors.blue,
-                ),
-              ],
-              type: BottomNavigationBarType.shifting,
-              currentIndex: _selectedIndex,
-              selectedItemColor: Colors.black,
-              iconSize: 40,
-              onTap: (index){_selectedIndex = index;
-                cubit.setState();},
-              elevation: 5
+          // bottomNavigationBar: BottomNavigationBar(
+          //   landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
+          //     useLegacyColorScheme: true,
+          //     items: const <BottomNavigationBarItem>[
+          //       BottomNavigationBarItem(
+          //           icon: Icon(Icons.coffee),
+          //           label: 'Active Orders',
+          //           backgroundColor: Colors.green
+          //       ),
+          //       BottomNavigationBarItem(
+          //           icon: Icon(Icons.table_rows_rounded),
+          //           label: 'History',
+          //           backgroundColor: Colors.yellow
+          //       ),
+          //       BottomNavigationBarItem(
+          //         icon: Icon(Icons.attach_money),
+          //         label: 'Summary',
+          //         backgroundColor: Colors.blue,
+          //       ),
+          //     ],
+          //     type: BottomNavigationBarType.shifting,
+          //     currentIndex: _selectedIndex,
+          //     selectedItemColor: Colors.black,
+          //     iconSize: 40,
+          //     onTap: (index){
+          //     _selectedIndex = index;
+          //       cubit.setState();
+          //       },
+          //     elevation: 5
+          // ),
+          bottomNavigationBar: FlashyTabBar(
+            selectedIndex: _selectedIndex,
+            showElevation: false,
+            iconSize: 30,
+            animationDuration: const Duration(milliseconds: 800),
+            onItemSelected: (index) {
+              _selectedIndex = index;
+              cubit.setState();
+            },
+            items: [
+              FlashyTabBarItem(
+                icon:  Icon(Icons.coffee,color: Theme.of(context).colorScheme.onBackground,),
+                title: const Text('Active Orders'),
+                activeColor: Theme.of(context).colorScheme.onBackground,
+                inactiveColor: Theme.of(context).colorScheme.onBackground,
+              ),
+              FlashyTabBarItem(
+                icon:  Icon(Icons.table_rows_rounded,color: Theme.of(context).colorScheme.onBackground),
+                title: const Text('History'),
+                activeColor: Theme.of(context).colorScheme.onBackground,
+                inactiveColor: Theme.of(context).colorScheme.onBackground,
+              ),
+              FlashyTabBarItem(
+                icon:  Icon(Icons.attach_money,color: Theme.of(context).colorScheme.onBackground),
+                title: const Text('Summary'),
+                activeColor: Theme.of(context).colorScheme.onBackground,
+                inactiveColor: Theme.of(context).colorScheme.onBackground,
+              ),
+            ],
           ),
           body: screens[_selectedIndex],
         ),

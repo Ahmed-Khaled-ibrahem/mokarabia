@@ -41,6 +41,7 @@ class AdminHistoryScreen extends StatelessWidget {
                           toString().replaceAll(' ', 'Q').replaceAll('.', 'Q').split('Q');
 
                           return ListTile(
+                            tileColor: index%2 == 0 ? Theme.of(context).colorScheme.onSecondary : Theme.of(context).colorScheme.secondary,
                             leading: Text(
                                 '${date[0]} \n'
                                     '${date[1]} \n'
