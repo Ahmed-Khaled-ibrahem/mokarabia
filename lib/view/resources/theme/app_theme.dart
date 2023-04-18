@@ -30,8 +30,8 @@ ThemeData lightTheme = ThemeData(
   colorScheme: ColorScheme.light(
     brightness: Brightness.light,
 
-    primary: AppColors.orange,
-    onPrimary: AppColors.black,
+    primary: AppColors.cubColor1,
+    onPrimary: AppColors.white,
     inversePrimary: AppColors.lightBrown,
 
     background: AppColors.white,
@@ -97,7 +97,7 @@ ThemeData darkTheme = ThemeData(
     elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
             foregroundColor: MaterialStateProperty.all(AppColors.white),
-            backgroundColor: MaterialStateProperty.all(AppColors.cubColor1)
+            backgroundColor: MaterialStateProperty.all(AppColors.orange)
         )
     ),
 
@@ -108,6 +108,7 @@ ThemeData darkTheme = ThemeData(
         color: AppColors.white
       ),
       // surfaceTintColor: AppColors.red.withOpacity(1)
-    )
+    ),
+
 
 );

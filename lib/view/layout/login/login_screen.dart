@@ -65,7 +65,7 @@ class LoginScreen extends StatelessWidget {
           return shouldPop!;
         },
         child: Scaffold(
-            backgroundColor: Theme.of(context).colorScheme.primary,
+            backgroundColor: Theme.of(context).colorScheme.onPrimary,
             body: SafeArea(
               child: SingleChildScrollView(
                 child: Column(
@@ -91,7 +91,8 @@ class LoginScreen extends StatelessWidget {
                       margin: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: Colors.white.withOpacity(0.3)),
+                          color: Theme.of(context).colorScheme.onBackground.withOpacity(0.3)
+                      ),
                       child: Column(
                         children: [
                           Form(
@@ -113,11 +114,11 @@ class LoginScreen extends StatelessWidget {
                                   }
                                   return null;
                                 },
-                                decoration: const InputDecoration(
-                                  icon: Icon(Icons.person_pin_rounded),
+                                decoration:  InputDecoration(
+                                  icon: const Icon(Icons.person_pin_rounded),
                                   labelText: 'Name',
                                   labelStyle: TextStyle(
-                                    color: Color(0xFF6200EE),
+                                    color:Theme.of(context).colorScheme.primary,
                                   ),
                                   helperText: 'your name to be sent with the orders',
                                 ),
@@ -207,8 +208,8 @@ class LoginScreen extends StatelessWidget {
                                   child: obsecure? const Icon(Icons.visibility_off):const Icon(Icons.visibility)),
                               icon: const Icon(Icons.password),
                               labelText: 'Password',
-                              labelStyle: const TextStyle(
-                                color: Color(0xFF6200EE),
+                              labelStyle:  TextStyle(
+                                color: Theme.of(context).colorScheme.primary,
                               ),
                             ),
                           ),
