@@ -47,8 +47,8 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: lightTheme,
         darkTheme: darkTheme,
-        themeMode: ThemeMode.light,
-        home: loginState == LoginState.user?  HomeScreen():
+        themeMode: ThemeMode.system,
+        home: loginState == LoginState.user?  const HomeScreen():
               loginState == LoginState.admin? AdminHomeScreen():
               LoginScreen(),
       ),

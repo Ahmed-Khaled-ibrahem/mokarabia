@@ -7,6 +7,7 @@ class AppColors{
   static Color orange = const Color(0xFFE5890A);
   static Color white = const Color(0xFFE6E6E6);
   static Color black = const Color(0xFF424642);
+  static Color background = const Color(0xFF576F72);
   static Color red = const Color(0xFFED2B2A);
 
   static Color card1 = const Color(0xFFEEEEEE);
@@ -56,9 +57,13 @@ ThemeData lightTheme = ThemeData(
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ButtonStyle(
         foregroundColor: MaterialStateProperty.all(AppColors.white),
-        backgroundColor: MaterialStateProperty.all(AppColors.cubColor1)
+        backgroundColor: MaterialStateProperty.all(AppColors.black)
     )
   ),
+
+  snackBarTheme: SnackBarThemeData(
+    backgroundColor: AppColors.orange
+  )
 
 
 );
@@ -110,5 +115,8 @@ ThemeData darkTheme = ThemeData(
       // surfaceTintColor: AppColors.red.withOpacity(1)
     ),
 
+    snackBarTheme: SnackBarThemeData(
+        backgroundColor: AppColors.white,
+    )
 
 );

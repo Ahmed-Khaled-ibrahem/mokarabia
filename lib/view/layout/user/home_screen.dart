@@ -21,10 +21,49 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: Row(
+        // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: ElevatedButton.icon(
+                 style: ButtonStyle(
+                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                       RoundedRectangleBorder(
+                           borderRadius: BorderRadius.circular(10),
+                           // side: BorderSide(color: Colors.red)
+                       )),
+                 ),
+                      onPressed: () async {
+                  makeOrderDialog(context);
+                },
+                icon: const Icon(Icons.coffee),
+                label: const Text("Make an order")),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: ElevatedButton.icon(
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        // side: BorderSide(color: Colors.red)
+                      )),
+                ),
+                onPressed: (){navigateTo(context, const HistoryScreen());},
+                icon: const Icon(Icons.history),
+                label: const Text("History")),
+          )],),
       appBar: AppBar(
         centerTitle: true,
         toolbarHeight: 140,
-        title: Image.asset('assets/images/logo.png',height: 140,),
+        title: Image.asset('assets/images/logo.png',height: 140,
+        // color: AppColors.red,
+        //     colorBlendMode: BlendMode.screen
+        ),
+
         actions: [
           Column(
             children: [
@@ -73,103 +112,86 @@ class HomeScreen extends StatelessWidget {
         return shouldPop!;
       },
       child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Wrap(
-                  children: List.generate(3, (index) => Card(
-                    color: Theme.of(context).colorScheme.onBackground,
-                      child: InkWell(
-                        onTap: (){
-                          addCup(cubit,index);
-                        },
-                        child: Column(
-                          children: [
-                            Stack(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(4),
-                                  child: SizedBox.square(
-                                    dimension: 150,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Image.asset(
-                                        allProducts[index].image!,
-                                      fit: BoxFit.cover,),
-                                    ),
+          child: Center(
+            child: Wrap(
+                children: List.generate(3, (index) => Card(
+                  color: Theme.of(context).colorScheme.onBackground,
+                    child: InkWell(
+                      onTap: (){
+                        addCup(cubit,index);
+                      },
+                      child: Column(
+                        children: [
+                          Stack(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(4),
+                                child: SizedBox.square(
+                                  dimension: 150,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image.asset(
+                                      allProducts[index].image!,
+                                    fit: BoxFit.cover,),
                                   ),
                                 ),
-                                Visibility(
-                                  visible: cubit.myOrder.products[allProducts[index].name] != 0,
-                                  child: InkWell(
-                                    onTap: (){makeZero(cubit,index);},
-                                    child: Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                         Container(
-                                             decoration: BoxDecoration(
-                                             borderRadius: BorderRadius.circular(20),
-                                             color: AppColors.black
-                                           ),
-                                             child: Icon(Icons.circle,color: AppColors.white,size: 40,),
-
+                              ),
+                              Visibility(
+                                visible: cubit.myOrder.products[allProducts[index].name] != 0,
+                                child: InkWell(
+                                  onTap: (){makeZero(cubit,index);},
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                       Container(
+                                           decoration: BoxDecoration(
+                                           borderRadius: BorderRadius.circular(20),
+                                           color: Theme.of(context).colorScheme.onBackground
                                          ),
-                                        Text(cubit.myOrder.products[allProducts[index].name].toString(),
-                                          style: const TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
-                                      ],
-                                    ),
+                                           child: Icon(Icons.circle,color: Theme.of(context).colorScheme.background,size: 40,),
+
+                                       ),
+                                      Text(cubit.myOrder.products[allProducts[index].name].toString(),
+                                        style: const TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                                    ],
                                   ),
                                 ),
-                                Positioned(
-                                  right: 0,
-                                    bottom: 0,
-                                    child: Card(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(5.0), //<-- SEE HERE
-                                        ),
-                                        color: Theme.of(context).primaryColor,
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(vertical: 2,horizontal: 10),
-                                          child: Text('${allProducts[index].price!.round()} LE',style: const TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
-                                        ))),
-                              ],
-                            ),
-                            Text(allProducts[index].name!,
-                              style: TextStyle(
-                                  color:Theme.of(context).colorScheme.background,
-                                  fontSize: 22,fontWeight: FontWeight.bold),),
+                              ),
+                              Positioned(
+                                right: 0,
+                                  bottom: 0,
+                                  child: Card(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(5.0), //<-- SEE HERE
+                                      ),
+                                      color: Theme.of(context).primaryColor,
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 2,horizontal: 10),
+                                        child: Text('${allProducts[index].price!.round()} LE',style: const TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                                      ))),
+                            ],
+                          ),
+                          Text(allProducts[index].name!,
+                            style: TextStyle(
+                                color:Theme.of(context).colorScheme.background,
+                                fontSize: 22,fontWeight: FontWeight.bold),),
 
-                            RawMaterialButton(
-                              // style: ButtonStyle(
-                              //   fixedSize: MaterialStateProperty.all(const Size(20, 20)),
-                              // ),
-                              onPressed: (){
-                                removeCup(cubit, index);
-                                },
+                          RawMaterialButton(
+                            // style: ButtonStyle(
+                            //   fixedSize: MaterialStateProperty.all(const Size(20, 20)),
+                            // ),
+                            onPressed: (){
+                              removeCup(cubit, index);
+                              },
 
-                              child: const Icon(Icons.remove_rounded,color: Colors.deepOrange,size: 40,),
-                            ),
-                          ],
-                        ),
-                      )
-                  ),
-                  ),
-              ),
-             Row(
-               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-               children: [ ElevatedButton.icon(
-                 onPressed: () async {
-                   // cubit.sendOrder(context);
-                   // cubit.readTable();
-
-                   makeOrderDialog(context);
-                   },
-                 icon: const Icon(Icons.coffee),
-                 label: const Text("Make an order")),
-               ElevatedButton.icon(
-                   onPressed: (){navigateTo(context, const HistoryScreen());},
-                   icon: const Icon(Icons.history),
-                   label: const Text("History"))],)
-            ],
+                            child: const Icon(Icons.remove_rounded,color: Colors.deepOrange,size: 40,),
+                          ),
+                        ],
+                      ),
+                    )
+                ),
+                ),
+            ),
           ),
         ),
     );
