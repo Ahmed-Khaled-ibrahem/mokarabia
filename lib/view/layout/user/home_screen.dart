@@ -13,9 +13,10 @@ import 'package:mokarabia/view/layout/login/login_screen.dart';
 import 'package:mokarabia/view/layout/user/history_screen.dart';
 import 'package:mokarabia/view/resources/componets/confirmation_dialog.dart';
 import 'package:mokarabia/view/resources/componets/navigator.dart';
+import 'package:mokarabia/view/resources/theme/app_theme.dart';
 
 class HomeScreen extends StatelessWidget {
-  HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +28,8 @@ class HomeScreen extends StatelessWidget {
         actions: [
           Column(
             children: [
-              IconButton(onPressed: (){
-
+              IconButton(
+                  onPressed: (){
                 showConfirmDialog(context,(){
                   Navigator.of(context).pop();
                   PreferenceHelper.putDataInSharedPreference(value: LoginState.none, key: PreferenceKey.loginState);
@@ -76,55 +77,79 @@ class HomeScreen extends StatelessWidget {
             children: [
               Wrap(
                   children: List.generate(3, (index) => Card(
-                      child: Column(
-                        children: [
-                          Stack(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: SizedBox.square(
-                                  dimension: 150,
-                                  child: Image.asset(allProducts[index].image!,
-                                  fit: BoxFit.cover,),
-                                ),
-                              ),
-                              Visibility(
-                                visible: cubit.myOrder.products[allProducts[index].name] != 0,
-                                child: InkWell(
-                                  onTap: (){makeZero(cubit,index);},
-                                  child: Stack(
-                                    alignment: Alignment.center,
-                                    children: [
-                                      const Icon(Icons.circle,color: Colors.blue,size: 40,),
-                                      Text(cubit.myOrder.products[allProducts[index].name].toString(),
-                                        style: const TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
-                                    ],
+                    color: Theme.of(context).colorScheme.onBackground,
+                      child: InkWell(
+                        onTap: (){
+                          addCup(cubit,index);
+                        },
+                        child: Column(
+                          children: [
+                            Stack(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(4),
+                                  child: SizedBox.square(
+                                    dimension: 150,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Image.asset(
+                                        allProducts[index].image!,
+                                      fit: BoxFit.cover,),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Positioned(
-                                right: 0,
-                                  bottom: 0,
-                                  child: Card(
-                                      color: Colors.red,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(3.0),
-                                        child: Text('${allProducts[index].price!.round()} LE',style: const TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
-                                      ))),
-                            ],
-                          ),
-                          Text(allProducts[index].name!,
-                            style: const TextStyle(fontSize: 22,fontWeight: FontWeight.bold),),
-                          Wrap(
-                            alignment: WrapAlignment.center,
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: [
-                            IconButton(onPressed: (){addCup(cubit,index);},
-                              icon: const Icon(Icons.add_circle,size: 40,color: Colors.green,), ),
-                            IconButton(onPressed: (){removeCup(cubit, index);},
-                              icon: const Icon(Icons.remove_circle,color: Colors.deepOrange,), ),
-                          ],),
-                        ],
+                                Visibility(
+                                  visible: cubit.myOrder.products[allProducts[index].name] != 0,
+                                  child: InkWell(
+                                    onTap: (){makeZero(cubit,index);},
+                                    child: Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                         Container(
+                                             decoration: BoxDecoration(
+                                             borderRadius: BorderRadius.circular(20),
+                                             color: AppColors.black
+                                           ),
+                                             child: Icon(Icons.circle,color: AppColors.white,size: 40,),
+
+                                         ),
+                                        Text(cubit.myOrder.products[allProducts[index].name].toString(),
+                                          style: const TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  right: 0,
+                                    bottom: 0,
+                                    child: Card(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(5.0), //<-- SEE HERE
+                                        ),
+                                        color: Theme.of(context).primaryColor,
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 2,horizontal: 10),
+                                          child: Text('${allProducts[index].price!.round()} LE',style: const TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                                        ))),
+                              ],
+                            ),
+                            Text(allProducts[index].name!,
+                              style: TextStyle(
+                                  color:Theme.of(context).colorScheme.background,
+                                  fontSize: 22,fontWeight: FontWeight.bold),),
+
+                            RawMaterialButton(
+                              // style: ButtonStyle(
+                              //   fixedSize: MaterialStateProperty.all(const Size(20, 20)),
+                              // ),
+                              onPressed: (){
+                                removeCup(cubit, index);
+                                },
+
+                              child: const Icon(Icons.remove_rounded,color: Colors.deepOrange,size: 40,),
+                            ),
+                          ],
+                        ),
                       )
                   ),
                   ),
