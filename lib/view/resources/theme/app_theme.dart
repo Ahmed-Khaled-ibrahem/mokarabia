@@ -27,8 +27,6 @@ ThemeData lightTheme = ThemeData(
   scaffoldBackgroundColor: AppColors.white,
 
 
-
-
   colorScheme: ColorScheme.light(
     brightness: Brightness.light,
 
@@ -48,9 +46,6 @@ ThemeData lightTheme = ThemeData(
     inverseSurface: AppColors.lightBrown,
 
   ),
-  // appBarTheme: AppBarTheme(
-  //   color: Colors.red
-  // ),
 
   textButtonTheme: TextButtonThemeData(
     style: ButtonStyle(
@@ -75,25 +70,18 @@ ThemeData darkTheme = ThemeData(
     primaryColor: AppColors.orange,
   scaffoldBackgroundColor: AppColors.black,
 
-    buttonColor: AppColors.red,
-    highlightColor: AppColors.red,
-    indicatorColor: AppColors.red,
-
-
 
   colorScheme:  ColorScheme.dark(
     brightness: Brightness.dark,
 
     primary: AppColors.orange,
     onPrimary: AppColors.black,
-    // inversePrimary: AppColors.lightBrown,
 
     background: AppColors.black,
     onBackground: AppColors.white,
 
     secondary: AppColors.card1D,
     onSecondary: AppColors.card2D,
-    // onInverseSurface: AppColors.lightBrown,
 
     surface: AppColors.black,
     onSurface: AppColors.white,
@@ -102,7 +90,7 @@ ThemeData darkTheme = ThemeData(
 
     textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all(AppColors.cubColor1)
+            foregroundColor: MaterialStateProperty.all(AppColors.orange)
         )
     ),
 
@@ -115,14 +103,11 @@ ThemeData darkTheme = ThemeData(
 
     dialogTheme: DialogTheme(
       backgroundColor: AppColors.black,
+      surfaceTintColor: AppColors.white,
       contentTextStyle: TextStyle(
         color: AppColors.white
-      )
+      ),
       // surfaceTintColor: AppColors.red.withOpacity(1)
     )
 
-    // appBarTheme: AppBarTheme(
-    //     backgroundColor: Colors.red,
-    //   iconTheme: IconThemeData(color: Colors.red,),
-    // )
 );

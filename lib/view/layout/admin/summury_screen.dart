@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mokarabia/cubit/app_cubit.dart';
 import 'package:mokarabia/cubit/app_states.dart';
+import 'package:mokarabia/view/resources/theme/app_theme.dart';
 
 class SummaryScreen extends StatelessWidget {
   const SummaryScreen({Key? key}) : super(key: key);
@@ -37,16 +38,24 @@ class SummaryScreen extends StatelessWidget {
                         builder: (BuildContext context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot){
                           return Column(
                             children: [
-                              const Text('Free'),
+                               Text('Free', style: TextStyle(
+                              color: Theme.of(context).colorScheme.background,
+                          ),),
                               Row(
                                 children: [
                                   Text(
                                     (snapshot.data![0]['Total']??0).toString(),
-                                    style: const TextStyle(fontSize: 45),
+                                    style: TextStyle(
+                                      color: Theme.of(context).colorScheme.background,
+                                        fontSize: 45
+                                    ),
                                   ),
-                                  const Text(
+                                   Text(
                                     'LE',
-                                    style: TextStyle(fontSize: 20),
+                                    style: TextStyle(
+                                        color: Theme.of(context).colorScheme.background,
+                                        fontSize: 20
+                                    ),
                                   ),
                                 ],
                               ),
@@ -68,16 +77,24 @@ class SummaryScreen extends StatelessWidget {
                             builder: (BuildContext context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot){
                               return Column(
                                 children:  [
-                                  const Text('Paid'),
+                                   Text('Paid' ,style: TextStyle(
+                                  color: Theme.of(context).colorScheme.background,
+                              ),),
                                   Row(
                                     children:  [
                                       Text(
                                         (snapshot.data![0]['Total']??0).toString(),
-                                        style: const TextStyle(fontSize: 45),
+                                        style: TextStyle(
+                                            color: Theme.of(context).colorScheme.background,
+                                            fontSize: 45
+                                        ),
                                       ),
-                                      const Text(
+                                      Text(
                                         'LE',
-                                        style: TextStyle(fontSize: 20),
+                                        style: TextStyle(
+                                            color: Theme.of(context).colorScheme.background,
+                                            fontSize: 20
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -130,6 +147,8 @@ class SummaryScreen extends StatelessWidget {
                               ],
                             ),
                             trailing: Wrap(
+                              alignment: WrapAlignment.center,
+                              crossAxisAlignment: WrapCrossAlignment.center,
                               children:  [
                               FutureBuilder(
                                 initialData: const [{'person':'user'}],
@@ -138,7 +157,7 @@ class SummaryScreen extends StatelessWidget {
                                   return Text(snapshot4.data!.length.toString());
                                 },
                               ),
-                              const Icon(Icons.coffee_rounded)
+                              const Icon(Icons.delivery_dining)
                             ],),
                             // leading: Text((index+1).toString()),
                           )),
