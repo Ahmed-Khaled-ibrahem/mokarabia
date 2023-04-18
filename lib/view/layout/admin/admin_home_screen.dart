@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mokarabia/model/login_states.dart';
@@ -63,9 +64,12 @@ class AdminHomeScreen extends StatelessWidget {
                   IconButton(onPressed: (){
 
                     showConfirmDialog(context,(){
+
                       Navigator.of(context).pop();
                       PreferenceHelper.putDataInSharedPreference(value: LoginState.none, key: PreferenceKey.loginState);
                       navigateReplacementTo(context, LoginScreen());
+                      FirebaseMessaging.instance.unsubscribeFromTopic("alert");
+
                     },'Logout','Are you sure that you want to Logout');
 
                     }, icon: const Icon(Icons.logout)),

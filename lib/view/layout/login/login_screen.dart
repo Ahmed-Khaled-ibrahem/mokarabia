@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mokarabia/cubit/app_cubit.dart';
@@ -21,137 +23,144 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusScopeNode currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus) {
-          currentFocus.unfocus();
-        }
-      },
-      child: BlocBuilder<AppCubit, AppStates>(
-  builder: (context, state) {
-    AppCubit cubit = AppCubit.get(context);
-    return WillPopScope(
-      onWillPop: () async {
-        final shouldPop = await showDialog<bool>(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: const Text('Do you want to Exit?'),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context, true);
-                  },
-                  child: const Text('Yes'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context, false);
-                  },
-                  child: const Text('No'),
-                ),
-              ],
-            );
-          },
-        );
-        return shouldPop!;
-      },
-      child: Scaffold(
-          backgroundColor: darkMainColor,
-          body: SafeArea(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Column(
-                    children: const [
-                      Text('Welcome to', style: TextStyle(fontSize: 14),),
-                      Text('MOKARABIA', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
-                    ],
-                  ),
-                  Transform.scale(
-                    scale: 1.5,
-                    child: Lottie.asset(
-                      'assets/lottie/coffee-time2.zip',
-                      height: 300
-                    ),
-                  ),
 
-                  const SizedBox(height: 15,),
-                  Container(
-                    // padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                    margin: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.white.withOpacity(0.8)),
-                    child: Column(
-                      children: [
-                        Form(
-                          key: _formKey,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 30),
-                            child: TextFormField(
-                              controller: userName,
-                              onEditingComplete: () {
-                                PreferenceHelper.putDataInSharedPreference(
-                                    value: userName.text, key: PreferenceKey.userName);
-                              },
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter your name';
-                                }
-                                if (value.length < 4) {
-                                  return 'the name is too short';
-                                }
-                                return null;
-                              },
-                              decoration: const InputDecoration(
-                                icon: Icon(Icons.person_pin_rounded),
-                                labelText: 'Name',
-                                labelStyle: TextStyle(
-                                  color: Color(0xFF6200EE),
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: Theme.of(context).brightness == Brightness.light?
+      SystemUiOverlayStyle.dark:SystemUiOverlayStyle.light,
+
+      child: GestureDetector(
+        onTap: () {
+          FocusScopeNode currentFocus = FocusScope.of(context);
+          if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+          }
+        },
+        child: BlocBuilder<AppCubit, AppStates>(
+  builder: (context, state) {
+      AppCubit cubit = AppCubit.get(context);
+      return WillPopScope(
+        onWillPop: () async {
+          final shouldPop = await showDialog<bool>(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text('Do you want to Exit?'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context, true);
+                    },
+                    child: const Text('Yes'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context, false);
+                    },
+                    child: const Text('No'),
+                  ),
+                ],
+              );
+            },
+          );
+          return shouldPop!;
+        },
+        child: Scaffold(
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            body: SafeArea(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Column(
+                      children: const [
+                        Text('Welcome to', style: TextStyle(fontSize: 14),),
+                        Text('MOKARABIA', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
+                      ],
+                    ),
+                    Transform.scale(
+                      scale: Theme.of(context).brightness == Brightness.dark? 1:1.5,
+                      child: Lottie.asset(Theme.of(context).brightness == Brightness.dark?
+                      'assets/lottie/coffe-orange.zip':
+                      'assets/lottie/coffee-time2.zip',
+                        height: 300
+                      ),
+                    ),
+
+                    const SizedBox(height: 15,),
+                    Container(
+                      // padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                      margin: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white.withOpacity(0.3)),
+                      child: Column(
+                        children: [
+                          Form(
+                            key: _formKey,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 30),
+                              child: TextFormField(
+                                controller: userName,
+                                onEditingComplete: () {
+                                  PreferenceHelper.putDataInSharedPreference(
+                                      value: userName.text, key: PreferenceKey.userName);
+                                },
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter your name';
+                                  }
+                                  if (value.length < 4) {
+                                    return 'the name is too short';
+                                  }
+                                  return null;
+                                },
+                                decoration: const InputDecoration(
+                                  icon: Icon(Icons.person_pin_rounded),
+                                  labelText: 'Name',
+                                  labelStyle: TextStyle(
+                                    color: Color(0xFF6200EE),
+                                  ),
+                                  helperText: 'your name to be sent with the orders',
                                 ),
-                                helperText: 'your name to be sent with the orders',
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 20,),
-                        ElevatedButton(
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                PreferenceHelper.putDataInSharedPreference(
-                                    value: userName.text, key: PreferenceKey.userName);
-                                PreferenceHelper.putDataInSharedPreference(
-                                    value: LoginState.user,
-                                    key: PreferenceKey.loginState);
-                                cubit.myOrder.personName = userName.text;
+                          const SizedBox(height: 20,),
+                          ElevatedButton(
+                              onPressed: () {
+                                if (_formKey.currentState!.validate()) {
+                                  PreferenceHelper.putDataInSharedPreference(
+                                      value: userName.text, key: PreferenceKey.userName);
+                                  PreferenceHelper.putDataInSharedPreference(
+                                      value: LoginState.user,
+                                      key: PreferenceKey.loginState);
+                                  cubit.myOrder.personName = userName.text;
 
-                                navigateReplacementTo(context, HomeScreen());
+                                  navigateReplacementTo(context, HomeScreen());
 
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('Welcome ${userName.text}')),
-                                );
-                              }
-                            },
-                            style: ButtonStyle(
-                                fixedSize: MaterialStateProperty.all(const Size(250, 30)),
-                                elevation: MaterialStateProperty.all(7)),
-                            child: const Text("Login")),
-                        TextButton(onPressed: () {
-                          adminLoginDialog(context);
-                        }, child: const Text("Are you Admin?")),
-                      ],
-                    ),
-                  )
-                ],
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text('Welcome ${userName.text}')),
+                                  );
+                                }
+                              },
+                              style: ButtonStyle(
+                                  fixedSize: MaterialStateProperty.all(const Size(250, 30)),
+                                  elevation: MaterialStateProperty.all(7)),
+                              child: const Text("Login")),
+                          TextButton(onPressed: () {
+                            adminLoginDialog(context);
+                          }, child: const Text("Are you Admin?")),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-    );
+      );
   },
 ),
+      ),
     );
   }
 
@@ -223,6 +232,9 @@ class LoginScreen extends StatelessWidget {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('Welcome to admin access')),
                         );
+
+                        FirebaseMessaging.instance.subscribeToTopic("alert");
+
                       }
 
                     },

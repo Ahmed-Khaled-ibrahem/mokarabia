@@ -13,9 +13,9 @@ class SummaryScreen extends StatelessWidget {
         AppCubit cubit = AppCubit.get(context);
 
         return Scaffold(
-          floatingActionButton: FloatingActionButton(onPressed: () {
-            cubit.sendNotification('ahmed k');
-          }),
+          // floatingActionButton: FloatingActionButton(onPressed: () {
+          //   cubit.sendNotification('ahmed k');
+          // }),
           body: Column(
             children: [
               Row(

@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 enum PreferenceKey {
   loginState,
   userName,
+  theme
 }
 
 extension KeyExtension on PreferenceKey {
@@ -14,6 +15,8 @@ extension KeyExtension on PreferenceKey {
         return 'loginState';
       case PreferenceKey.userName:
         return 'userName';
+      case PreferenceKey.theme:
+        return 'theme';
     }
   }
 }

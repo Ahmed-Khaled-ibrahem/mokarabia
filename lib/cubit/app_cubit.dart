@@ -7,7 +7,6 @@ import 'package:mokarabia/model/order.dart';
 import 'package:mokarabia/model/order_sent_state.dart';
 import 'package:mokarabia/model/product.dart';
 import 'package:mokarabia/repo/sql.dart';
-import 'package:motion_toast/motion_toast.dart';
 import '../repo/pref_helper.dart';
 import 'app_states.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -107,6 +106,7 @@ class AppCubit extends Cubit<AppStates> {
 
       historyTable.insertRow(myOrder.export());
 
+      sendNotification(myOrder.personName);
       // var map = await historyTable.readData();
 
     }).

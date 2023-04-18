@@ -27,6 +27,8 @@ dependencies:
   vibration: ^1.7.6
   dio: ^4.0.4
   http: ^0.13.5
+  flutter_launcher_icons: ^0.13.0
+
 
 dev_dependencies:
   flutter_test:
