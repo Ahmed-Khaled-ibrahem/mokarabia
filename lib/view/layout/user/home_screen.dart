@@ -59,6 +59,7 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         toolbarHeight: 140,
+        leading: Container(),
         title: Image.asset('assets/images/logo.png',height: 140,
         // color: AppColors.red,
         //     colorBlendMode: BlendMode.screen
