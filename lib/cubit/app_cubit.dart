@@ -35,9 +35,25 @@ class AppCubit extends Cubit<AppStates> {
   String adminPass = 'ffdfhoa4g56hdgh';
   List activeOrders  = [];
 
+  final String accessSecret = 'v>1.0.0';
+  String accessSecretFirebase = '';
+
 
   void setState() {
     emit(AppSetState());
+  }
+
+  String allowAccess(){
+
+    if(accessSecretFirebase == accessSecret){
+      return 'allow';
+    }
+    if(accessSecretFirebase == ''){
+      return 'noInternet';
+    }
+    else{
+     return 'denied';
+    }
   }
 
   Future<void> initialSetup(GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey) async {
@@ -51,6 +67,8 @@ class AppCubit extends Cubit<AppStates> {
       allProductsMap['latte']!.price = double.parse(snapshot.child('const/latte').value.toString());
       allProductsMap['esp']!.price = double.parse(snapshot.child('const/esp').value.toString());
       allProductsMap['cap']!.price = double.parse(snapshot.child('const/cap').value.toString());
+
+      accessSecretFirebase = snapshot.child('const/access').value.toString();
 
     } else {}
 
