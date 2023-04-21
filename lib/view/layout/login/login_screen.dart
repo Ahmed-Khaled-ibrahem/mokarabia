@@ -229,6 +229,7 @@ class LoginScreen extends StatelessWidget {
                             key: PreferenceKey.loginState);
 
                         navigateReplacementTo(context, AdminHomeScreen());
+                        cubit.readOrders();
 
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('Welcome to admin access')),

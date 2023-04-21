@@ -38,7 +38,6 @@ class AppCubit extends Cubit<AppStates> {
   final String accessSecret = 'v>1.0.0';
   String accessSecretFirebase = '';
 
-
   void setState() {
     emit(AppSetState());
   }
@@ -89,7 +88,6 @@ class AppCubit extends Cubit<AppStates> {
             behavior: SnackBarBehavior.floating,
           ),
         );
-
         readOrders();
       }
 
