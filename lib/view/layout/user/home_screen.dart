@@ -115,7 +115,7 @@ class HomeScreen extends StatelessWidget {
       child: SingleChildScrollView(
           child: Center(
             child: Wrap(
-                children: List.generate(3, (index) => Card(
+                children: [...List.generate(3, (index) => Card(
                   color: Theme.of(context).colorScheme.onBackground,
                     child: InkWell(
                       onTap: (){
@@ -176,7 +176,6 @@ class HomeScreen extends StatelessWidget {
                             style: TextStyle(
                                 color:Theme.of(context).colorScheme.background,
                                 fontSize: 22,fontWeight: FontWeight.bold),),
-
                           RawMaterialButton(
                             // style: ButtonStyle(
                             //   fixedSize: MaterialStateProperty.all(const Size(20, 20)),
@@ -192,6 +191,53 @@ class HomeScreen extends StatelessWidget {
                     )
                 ),
                 ),
+
+                  FutureBuilder<bool>(
+                      future: cubit.checkCancelation(),
+                      initialData: false,
+                      builder: (BuildContext context, AsyncSnapshot<bool> snapshot){
+                        if(snapshot.hasData){
+                          return Visibility(
+                            visible: snapshot.data ?? false,
+                            child: InkWell(
+                              onTap: (){
+                                showConfirmDialog(context,() async {
+                                  Navigator.of(context).pop();
+                                  cubit.sendCancelation(cubit.myOrder.personName);
+                                  cubit.removeOrderClient(cubit.myOrder.personName);
+                                },'Order Cancellation','Are you sure that you want to send cancellation notification');
+
+                              },
+                              child: Card(
+                                color: Theme.of(context).colorScheme.onBackground,
+                                child: SizedBox(
+                                  width: 160,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(20),
+                                    child: Column(
+                                      children: [
+                                        Icon(
+                                          Icons.cancel,size: 80,
+                                          color: Theme.of(context).colorScheme.background,),
+                                        Text('Click here if you want to send notification to cancel the order',
+                                          style: TextStyle(
+                                            color:Theme.of(context).colorScheme.background,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        }
+                        else{
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
+                      })
+                ]
             ),
           ),
         ),

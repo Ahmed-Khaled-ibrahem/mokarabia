@@ -77,7 +77,6 @@ class AppCubit extends Cubit<AppStates> {
 
     scaffoldMessenger = scaffoldMessengerKey;
 
-
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
 
       if (message.notification != null) {
@@ -91,6 +90,7 @@ class AppCubit extends Cubit<AppStates> {
           ),
         );
 
+        readOrders();
       }
 
     });
@@ -199,8 +199,22 @@ class AppCubit extends Cubit<AppStates> {
         setState();
       });
     }
+  }
 
+  Future<void> removeOrderClient(name) async {
+    final snapshot = await ref.get();
 
+    if (snapshot.exists) {
+      snapshot.children.forEach((element) async {
+        if(element.key!.contains(myOrder.personName)){
+          await ref.child(element.key!).remove().
+          whenComplete((){
+            setState();
+          });
+        }
+      });
+    } else {
+    }
   }
 
   Future<void> testSQL() async {
@@ -268,6 +282,69 @@ class AppCubit extends Cubit<AppStates> {
 
   }
 
+  Future<void> sendCancelation(String name) async {
+
+    const String serverKey = 'AAAA0D7H_XQ:APA91bGu2eXPk11JH9oMx-f-fpTgDCXwqsaNQq7lTqUOEmnQM0u2rDpF5RyJyAboQqoP2gqpQJNDwW0MnjTe-m1YXL2ivZtIu1WgOG17sy1whpRsD95OMM2u4WyHFqxOkvmKQlF4uRSE';
+    final uri = Uri.parse('https://fcm.googleapis.com/fcm/send');
+
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'key=$serverKey',
+    };
+
+    Map<String, dynamic> body = {
+      "data": {'name': name},
+      // 'topic':'alert',
+      "to": "/topics/alert",
+      "notification": {
+        "title": '$name canceling the order',
+        "body": "please delete the order",
+        "sound": "default"},
+
+      "android": {
+        "priority": "HIGH",
+        "notification": {
+          "notification_priority": "PRIORITY_MAX",
+          "sound": "default",
+          "default_sound": true,
+          "default_vibrate_timings": true,
+          "default_light_settings": true
+        }
+      }
+    };
+
+    String jsonBody = json.encode(body);
+    final encoding = Encoding.getByName('utf-8');
+
+    Response response = await post(
+      uri,
+      headers: headers,
+      body: jsonBody,
+      encoding: encoding,
+    );
+
+    int statusCode = response.statusCode;
+    String responseBody = response.body;
+
+    print(statusCode);
+    print(responseBody);
+
+  }
+
+  Future<bool> checkCancelation() async {
+    final snapshot = await ref.get();
+    if (snapshot.exists) {
+      bool exist = false;
+      snapshot.children.forEach((element) {
+        if(element.key!.contains(myOrder.personName)){
+          exist = true;
+        }
+      });
+      return exist;
+    } else {
+      return false;
+    }
+  }
 }
 
 
