@@ -112,6 +112,9 @@ class LoginScreen extends StatelessWidget {
                                   if (value.length < 4) {
                                     return 'the name is too short';
                                   }
+                                  if (value.contains('.')) {
+                                    return 'name should not contain dots >(.)';
+                                  }
                                   return null;
                                 },
                                 decoration:  InputDecoration(
