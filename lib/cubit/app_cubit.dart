@@ -96,6 +96,7 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   Future<void> sendOrder(context) async {
+
     if(myOrder.getCost().round()==0){
       Navigator.of(context).pop();
       showError(context, 'please select order first');

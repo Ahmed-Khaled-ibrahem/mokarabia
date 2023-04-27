@@ -21,6 +21,9 @@ class AccessScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AppCubit, AppStates>(
       builder: (context, state) {
+        print('----------------------');
+        print("Current state is $state");
+
         AppCubit cubit = AppCubit.get(context);
         String access = cubit.allowAccess();
 
